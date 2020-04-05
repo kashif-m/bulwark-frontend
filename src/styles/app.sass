@@ -1,0 +1,55 @@
+.app
+	overflow: hidden
+	.home
+		padding-top: 20
+		display: grid
+		grid-template-rows: max-content auto
+		grid-template-columns: 60vw 40vw
+		color: $black_rich
+		.header
+			padding-right: 100
+			justify-self: flex-end
+			font-size: 50
+		.body
+			padding-top: 50
+			font-size: 20
+			justify-self: flex-end
+			width: 500
+		.side
+			grid-column: 2 / 3
+			grid-row: 1 / -1
+			padding: 100 0 0 40
+			.login
+				cursor: pointer
+				margin-top: 20
+				padding: 10 100
+				background-color: $orange_pumpkin
+				color: white
+				height: max-content
+				width: max-content
+
+
+@media (max-width: 400px)
+	.app > .home
+		max-width: 100vw
+		height: 100vh
+		display: grid
+		padding: 20 0 !important
+		grid-template-columns: 100vw !important
+		grid-template-rows: max-content auto max-content !important
+		box-sizing: border-box
+
+		.header
+			justify-self: center !important
+			padding: 0 !important
+			font-size: 40 !important
+		.body
+			grid-row: 2 / 3 !important
+			box-sizing: border-box
+			max-width: 100vw
+			padding: 50 20
+		.side
+			grid-column: 1 / -1 !important
+			grid-row: 3 / 4 !important
+			padding: 0 !important
+			justify-self: center

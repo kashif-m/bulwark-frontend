@@ -7,5 +7,5 @@ import './styles/root.sass'
 
 render(
     <App />,
-    document.getElementById('root')
+    document.getElementById('react-app')
 )
