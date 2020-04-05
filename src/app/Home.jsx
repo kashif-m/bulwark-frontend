@@ -7,12 +7,12 @@ const Home = props => {
 		<div className='home' >
 			<div className="header">unnamed-frontend</div>
 			<div className="body">
-				Automobile insurance with blockchain technologies. <br/>
+				Automobile insurance with blockchain technologies.
 				We use blockchain systems to strengthen our policies and your insurance claims. <br/> <br/>
 				Contact us and get started today!
 			</div>
 			<div className="side">
-				Already Registered with us?
+				Already Registered?
 				<div className="login">
 					SIGN IN
 				</div>
