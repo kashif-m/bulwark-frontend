@@ -1,7 +1,9 @@
 
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 
 const Home = props => {
+
+	const [authScreen, setAuthScreen] = useState(false)
 
 	return (
 		<div className='home' >
@@ -12,10 +14,29 @@ const Home = props => {
 				Contact us and get started today!
 			</div>
 			<div className="side">
-				Already Registered?
-				<div className="login">
-					SIGN IN
-				</div>
+				{
+					!authScreen ?
+					<React.Fragment>
+						Already Registered?
+						<div className="login"
+							onClick={() => setAuthScreen(true)} >
+							SIGN IN
+						</div>
+					</React.Fragment>
+					: <div className="login-form">
+						<div className="heading">
+							Enter your credentials
+							<img src={require('../assets/images/cross.svg')} alt="x"
+								onClick={() => setAuthScreen(false)} />
+						</div>
+						<label>E-MAIL</label>
+						<input type="email" placeholder='Registered e-mail' />
+						<label>PASSWORD</label>
+						<input type="password" placeholder='Your password' />
+
+						<div className="submit">LOGIN</div>
+					</div>
+				}
 			</div>
 		</div>
 	)
