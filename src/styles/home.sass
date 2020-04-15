@@ -1,0 +1,135 @@
+.home
+	display: grid
+	grid-template-rows: max-content auto
+	grid-template-columns: 60vw 40vw
+	color: $black_rich
+	height: 100%
+	.header
+		padding: 20 100 0 0
+		justify-self: flex-end
+		font:
+			family: MontserratBold
+			size: 40
+	.body
+		padding: 50 40 0 0
+		font:
+			family: Varela
+			size: 20
+		justify-self: flex-end
+		width: 500
+	.side
+		grid-column: 2 / 3
+		grid-row: 1 / -1
+		height: 100%
+		width: 100%
+		padding: 100 0 0 40
+		font-size: 15
+		border-left: 1px solid $gray_platinum
+
+		.login
+			cursor: pointer
+			margin-top: 15
+			padding: 10 100
+			border-radius: 2px
+			background-color: $orange_pumpkin
+			color: white
+			height: max-content
+			width: max-content
+			font-family: MontserratBold
+		.login-form
+			display: grid
+			grid-template-rows: repeat(5, max-content) 20px max-content
+
+			.heading
+				display: flex
+				margin-bottom: 40
+				img
+					cursor: pointer
+					margin-left: 30
+					height: 30
+				font:
+					family: MontserratBold
+					size: 25
+
+			input, label, .submit
+				margin-left: 20
+				width: max-content
+			label
+				margin-bottom: 10
+				font:
+					family: MontserratBold
+					size: 15
+			input
+				min-width: 25ch
+				padding: 10 20
+				border-radius: 2px
+				background-color: $gray_platinum
+				font:
+					family: Varela
+					size: 14
+					weight: 100
+				&:first-of-type
+					margin-bottom: 20
+				&:last-of-type
+					margin-bottom: 15
+
+			.submit
+				grid-row: -2 / -1
+				cursor: pointer
+				background-color: $orange_pumpkin
+				margin-top: 15
+				border-radius: 2px
+				text-align: center
+				color: white
+				padding: 10 40
+				font:
+					size: 15
+					family: MontserratBold
+
+
+@media (max-width: 500px)
+	.home
+		max-width: 100vw
+		height: 100vh
+		display: grid
+		padding: 20 0
+		grid-template-columns: 100vw
+		grid-template-rows: max-content auto max-content
+		box-sizing: border-box
+
+		.header
+			justify-self: center
+			padding: 0
+			font-size: 35
+		.body
+			grid-row: 2 / 3
+			box-sizing: border-box
+			max-width: 100vw
+			padding: 50 20
+		.side
+			border-left: 0
+			border-top: 1px solid $gray_platinum
+			display: flex
+			flex-flow: column
+			align-items: center
+			grid-column: 1 / -1
+			grid-row: 3 / 4
+			padding: 20 0 0 0
+			.login-form
+				display: grid
+				// grid-template-columns: max-content max-content !important
+				.heading
+					grid-column: 1 / -1
+					margin-bottom: 30
+				label
+					align-self: center
+					margin-left: 0
+				input
+					margin-left: 0
+					width: 100%
+				.submit
+					box-sizing: border-box
+					grid-column: 1 / -1
+					justify-self: center
+					width: 100%
+					margin: 0
