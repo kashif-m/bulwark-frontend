@@ -13,7 +13,7 @@ class Dash extends Component {
 				<div className="heading">View Claims</div>
 				<div className="info">
 					<img src={require('../assets/images/info.svg')} alt="" />
-					<span>View all your claims recorded on the blockchain.</span>
+					<span>All your claims as recorded on the blockchain.</span>
 				</div>
 				<div className="options">
 					<div className="option">Claim history</div>
@@ -38,12 +38,25 @@ class Dash extends Component {
 	}
 
 	renderOverview = () => {
+		const [user] = this.props.user
 		return (
 			<div className="overview">
 				<div className="heading">Overview</div>
 				<div className="info">
 					<img src={require('../assets/images/info.svg')} alt="" />
 					<span>An overview of your account.</span>
+				</div>
+			</div>
+		)
+	}
+
+	renderBlockchain = () => {
+		return (
+			<div className="blockchain">
+				<div className="heading">Blockchain</div>
+				<div className="info">
+					<img src={require('../assets/images/info.svg')} alt="" />
+					<span>The blockchain itself.</span>
 				</div>
 			</div>
 		)
@@ -70,22 +83,28 @@ class Dash extends Component {
 							<img src={require('../assets/images/dashboard.svg')} alt="" />
 							<span>Overview</span>
 						</div>
-						<div className={`option${selectedOption === 'account' ? ' selected' : ''}`}
-							onClick={() => this.setState({selectedOption: 'account'})} >
-							<img src={require('../assets/images/account.svg')} alt="" />
-							<span>Account</span>
-						</div>
 						<div className={`option${selectedOption === 'claims' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'claims'})} >
 							<img src={require('../assets/images/claim.svg')} alt="" />
 							<span>Claims</span>
 						</div>
+						<div className={`option${selectedOption === 'account' ? ' selected' : ''}`}
+							onClick={() => this.setState({selectedOption: 'account'})} >
+							<img src={require('../assets/images/account.svg')} alt="" />
+							<span>Account</span>
+						</div>
+						<div className={`option${selectedOption === 'blockchain' ? ' selected' : ''}`}
+							onClick={() => this.setState({selectedOption: 'blockchain'})} >
+							<img src={require('../assets/images/blockchain.svg')} alt="" />
+							<span>Blockchain</span>
+						</div>
 					</div>
 				</div>
 				{
 					selectedOption === 'overview' ? this.renderOverview()
-					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'claims' ? this.renderClaims()
+					: selectedOption === 'account' ? this.renderAccountDetails()
+					: selectedOption === 'blockchain' ? this.renderBlockchain()
 					: null
 				}
 			</div>
