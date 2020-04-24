@@ -8,8 +8,14 @@ import Home from './app/Home.jsx'
 class App extends Component {
 
 	state = {
-        user: false
+        // user: false
+        user: {
+            id: 'randomasfuckid',
+            name: 'Kashif',
+        }
     }
+
+    updateUser = user => this.setState({user})
 
     render() {
 
@@ -18,8 +24,9 @@ class App extends Component {
         return (
             <div className="app">
                 {
-                    !user ? <Home />
-                    : <Dash />
+                    !user
+                    ? <Home updateUser={this.updateUser} />
+                    : <Dash user={[user, this.updateUser]} />
                 }
             </div>
         )
