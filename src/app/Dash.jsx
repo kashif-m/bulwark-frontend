@@ -4,7 +4,7 @@ import React, { Component } from 'react'
 class Dash extends Component {
 
 	state = {
-		selectedOption: 'claims'
+		selectedOption: 'wallet'
 	}
 
 	renderClaims = () => {
@@ -26,12 +26,27 @@ class Dash extends Component {
 	}
 
 	renderAccountDetails = () => {
+		const [user] = this.props.user
 		return (
 			<div className="account">
 				<div className="heading">Account Details</div>
 				<div className="info">
 					<img src={require('../assets/images/info.svg')} alt="" />
 					<span>Your details as recorded on the blockchain.</span>
+				</div>
+				<div className="options">
+					<div className="option">
+						<div className="heading">Keys</div>
+						<div className="key-h">Private Key</div>
+						<div className="key-v">{user.keys.private}</div>
+						<div className="key-h">Public Key</div>
+						<div className="key-v">{user.keys.public}</div>
+					</div>
+					<div className="option">
+						<div className="heading">Digital Documents</div>
+						<div className="key-h">Aadhar Car</div>
+						<div className="key-h">Vehicle License</div>
+					</div>
 				</div>
 			</div>
 		)
@@ -57,6 +72,45 @@ class Dash extends Component {
 				<div className="info">
 					<img src={require('../assets/images/info.svg')} alt="" />
 					<span>The blockchain itself.</span>
+				</div>
+			</div>
+		)
+	}
+
+	renderWallet = () => {
+		const [user] = this.props.user
+		return (
+			<div className="wallet">
+				<div className="heading">Your Wallet</div>
+				<div className="info">
+					<img src={require('../assets/images/info.svg')} alt="" />
+					<span>Credits in your wallet.</span>
+				</div>
+				<div className="options">
+					<div className="option">
+						<div className="heading">Total available credits</div>
+						<div className="val">{user.wallet.credits} ETH</div>
+					</div>
+					<div className="option">
+						<div className="heading">Transaction history</div>
+						{this.renderTransactionHistory(user.wallet.history)}
+					</div>
+				</div>
+			</div>
+		)
+	}
+
+	renderTransactionHistory = history => {
+		return (
+			<div className="transaction-history">
+				<div className="headers">
+					<span>No.</span>
+					<span>Timestamp</span>
+					<span>Sender</span>
+					<span>Receiver</span>
+					<span>Type</span>
+					<span>Amount</span>
+					<span>Credits</span>
 				</div>
 			</div>
 		)
@@ -93,6 +147,11 @@ class Dash extends Component {
 							<img src={require('../assets/images/account.svg')} alt="" />
 							<span>Account</span>
 						</div>
+						<div className={`option${selectedOption === 'wallet' ? ' selected' : ''}`}
+							onClick={() => this.setState({selectedOption: 'wallet'})} >
+							<img src={require('../assets/images/wallet.svg')} alt="" />
+							<span>Wallet</span>
+						</div>
 						<div className={`option${selectedOption === 'blockchain' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'blockchain'})} >
 							<img src={require('../assets/images/blockchain.svg')} alt="" />
@@ -104,6 +163,7 @@ class Dash extends Component {
 					selectedOption === 'overview' ? this.renderOverview()
 					: selectedOption === 'claims' ? this.renderClaims()
 					: selectedOption === 'account' ? this.renderAccountDetails()
+					: selectedOption === 'wallet' ? this.renderWallet()
 					: selectedOption === 'blockchain' ? this.renderBlockchain()
 					: null
 				}

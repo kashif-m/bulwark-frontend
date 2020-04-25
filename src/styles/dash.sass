@@ -47,7 +47,7 @@
 					height: 20
 					margin-right: 20
 
-	.claims, .account, .overview, .blockchain
+	.claims, .account, .overview, .wallet, .blockchain
 		display: flex
 		flex-flow: column
 		padding: 20 0 0 30
@@ -66,8 +66,9 @@
 				color: #4A4A4A
 				font-size: 12
 
+	.claims
 		.options
-			padding: 20 0 0 10
+			margin: 20 0 0 10
 			.option
 				font-size: 14
 				width: max-content
@@ -77,3 +78,47 @@
 				margin-bottom: 15
 				background-color: $black_rich
 				color: white
+
+	.account
+		.options
+			margin-left: 10
+			.option
+				.heading
+					padding: 20 20 5 0
+					width: max-content
+					font-size: 20
+					border-bottom: 2px solid $gray_platinum
+				.key-h
+					font:
+						family: MontserratBold
+						size: 17
+					margin: 15 0 0 10
+				.key-v
+					margin: 5 0 0 10
+					font:
+						family: monospace
+						size: 15
+
+	.wallet
+		.options
+			margin-left: 10
+			.option
+				.heading
+					padding: 20 20 5 0
+					width: max-content
+					font-size: 20
+					border-bottom: 2px solid $gray_platinum
+				.val
+					margin: 10 0 0 5
+					font:
+						family: MontserratBold
+						size: 30
+
+				.transaction-history
+					.headers
+						font-family: MontserratRegular
+						margin-top: 10
+						display: grid
+						grid-template-columns: 40px repeat(6, 100px)
+						span
+							justify-self: center
