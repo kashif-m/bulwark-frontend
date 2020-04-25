@@ -37,15 +37,15 @@ class Dash extends Component {
 				<div className="options">
 					<div className="option">
 						<div className="heading">Keys</div>
-						<div className="key-h">Private Key</div>
-						<div className="key-v">{user.keys.private}</div>
-						<div className="key-h">Public Key</div>
-						<div className="key-v">{user.keys.public}</div>
+						<div className="h">Private Key</div>
+						<div className="v">{user.keys.private}</div>
+						<div className="h">Public Key</div>
+						<div className="v">{user.keys.public}</div>
 					</div>
 					<div className="option">
 						<div className="heading">Digital Documents</div>
-						<div className="key-h">Aadhar Car</div>
-						<div className="key-h">Vehicle License</div>
+						<div className="h dd">Aadhar Card</div>
+						<div className="h dd">Vehicle License</div>
 					</div>
 				</div>
 			</div>
@@ -88,7 +88,7 @@ class Dash extends Component {
 				</div>
 				<div className="options">
 					<div className="option">
-						<div className="heading">Total available credits</div>
+						<div className="heading">Total credits</div>
 						<div className="val">{user.wallet.credits} ETH</div>
 					</div>
 					<div className="option">
@@ -104,13 +104,11 @@ class Dash extends Component {
 		return (
 			<div className="transaction-history">
 				<div className="headers">
-					<span>No.</span>
 					<span>Timestamp</span>
 					<span>Sender</span>
 					<span>Receiver</span>
-					<span>Type</span>
 					<span>Amount</span>
-					<span>Credits</span>
+					<span>Balance</span>
 				</div>
 			</div>
 		)

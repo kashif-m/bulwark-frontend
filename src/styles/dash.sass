@@ -19,10 +19,10 @@
 		.logout
 			cursor: pointer
 			font-size: 12
-			background-color: $black_rich
+			background-color: $red
 			padding: 5 20
 			color: white
-			border-radius: 3px
+			border-radius: 100px
 	
 	.side-menu
 		height: 100%
@@ -88,23 +88,25 @@
 					width: max-content
 					font-size: 20
 					border-bottom: 2px solid $gray_platinum
-				.key-h
+				.h
 					font:
-						family: MontserratBold
+						family: HammersmithOne
 						size: 17
 					margin: 15 0 0 10
-				.key-v
+				.v
 					margin: 5 0 0 10
 					font:
 						family: monospace
 						size: 15
+				.dd
+					cursor: pointer
 
 	.wallet
 		.options
 			margin-left: 10
 			.option
 				.heading
-					padding: 20 20 5 0
+					padding: 25 20 5 0
 					width: max-content
 					font-size: 20
 					border-bottom: 2px solid $gray_platinum
@@ -115,10 +117,18 @@
 						size: 30
 
 				.transaction-history
+					margin-top: 10
+					box-sizing: border-box
+					border-radius: 3px
+					padding: 10 10 5 10
+					width: max-content
+					background-color: $gray_platinum
 					.headers
-						font-family: MontserratRegular
-						margin-top: 10
+						font:
+							size: 15
+							family: Varela
 						display: grid
-						grid-template-columns: 40px repeat(6, 100px)
+						grid-template-columns: 120px repeat(4, 100px)
 						span
-							justify-self: center
+							justify-self: flex-start
+							padding-left: 20
