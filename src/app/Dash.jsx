@@ -44,8 +44,8 @@ class Dash extends Component {
 					</div>
 					<div className="option">
 						<div className="heading">Digital Documents</div>
-						<div className="h dd">Aadhar Card</div>
 						<div className="h dd">Vehicle License</div>
+						<div className="v dd">{user.documents.license}</div>
 					</div>
 				</div>
 			</div>

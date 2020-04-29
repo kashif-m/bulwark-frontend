@@ -22,7 +22,11 @@ const Home = props => {
 		}
 
 		axios.post('http://localhost:5000/user/new', data)
-			.then(res => console.log(res.data))
+			.then(res => {
+				console.log(res.data)
+				if(res.data.msg)
+					setAuthScreen('login')
+			})
 			.catch(err => {
 				if(err.response.data.err)
 					setErr(err.response.data.err)
@@ -41,7 +45,8 @@ const Home = props => {
 
 		axios.post('http://localhost:5000/user/login', data)
 			.then(res => {
-				console.log(res.data)
+				if(res.data.user)
+					props.updateUser(res.data.user)
 			})
 			.catch(err => {
 				if(err.response.data.err)
@@ -111,10 +116,10 @@ const Home = props => {
 
 	return (
 		<div className='home' >
-			<div className="header">unnamed-frontend</div>
+			<div className="header">Bulwark Insurance</div>
 			<div className="body">
 				Automobile insurance with blockchain technologies.
-				We use blockchain systems to strengthen our policies and your insurance claims. <br/> <br/>
+				We use a blockchain system to strengthen our policies and your insurance claims. <br/> <br/>
 				Contact us and get started today!
 			</div>
 			<div className="side">

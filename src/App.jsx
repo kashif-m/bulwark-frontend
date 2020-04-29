@@ -9,18 +9,6 @@ class App extends Component {
 
 	state = {
         user: false
-        // user: {
-        //     id: 'randomasfuckid',
-        //     name: 'Kashif',
-        //     keys: {
-        //         private: '218978921b89xy1b283b89z12893u2198u39021',
-        //         public: 'sauig872r78y2189ye82n9ze892yne89327yz73'
-        //     },
-        //     wallet: {
-        //         credits: '789.98',
-        //         history: []
-        //     }
-        // }
     }
 
     updateUser = user => this.setState({user})
