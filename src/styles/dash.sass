@@ -40,12 +40,12 @@
 				border-radius: 100px
 				font:
 					size: 18
+
+				svg
+					margin-right: 20
+
 				&.selected
 					background-color: $gray_platinum
-
-				img
-					height: 20
-					margin-right: 20
 
 	.claims, .account, .overview, .wallet, .blockchain
 		display: flex
@@ -58,8 +58,7 @@
 		.info
 			display: flex
 			align-items: center
-			img
-				height: 12
+			svg
 				margin: 0 5
 			span
 				margin: 10 0
@@ -69,15 +68,32 @@
 	.claims
 		.options
 			margin: 20 0 0 10
+			.option:first-of-type
+				svg
+					margin-right: 10
+					fill-rule: evenodd
+					& path
+						fill-rule: evenodd
+						fill: $black_rich
+				border: 2px solid $black_rich
+				border-radius: 3px
+				background-color: white
+				color: $black_rich
+				padding: 5 15
+				margin-bottom: 20
+				&:hover
+					background-color: $black_rich
+					color: white
+					svg path, svg
+						fill: white
 			.option
 				font-size: 14
 				width: max-content
 				cursor: pointer
-				border-radius: 3px
-				padding: 5 15
-				margin-bottom: 15
-				background-color: $black_rich
-				color: white
+				.heading
+					padding: 0 10 5 0
+					font-size: 20
+					border-bottom: 1px solid $gray_platinum
 
 	.account
 		.options
@@ -94,6 +110,9 @@
 						size: 17
 					margin: 15 0 0 10
 				.v
+					padding: 10 20
+					width: min-content
+					background-color: #F6F6F0
 					margin: 5 0 0 10
 					font:
 						family: monospace

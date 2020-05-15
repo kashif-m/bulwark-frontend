@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="50px" height="50px" viewBox="0 0 50 50" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="30px" height="30px" viewBox="0 0 30 30" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
-    <title>cross</title>
+    <title>close</title>
     <desc>Created with Sketch.</desc>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="cross">
-            <circle id="Oval" fill="#F4442E" cx="25" cy="25" r="25"></circle>
-            <polyline id="Path" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" points="16 34 25 25 34 16"></polyline>
-            <polyline id="Path" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" points="16 16 25 25 34 34"></polyline>
+        <g id="close">
+            <circle id="Oval" fill="#F4442E" cx="15" cy="15" r="15"></circle>
+            <polyline id="Path" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" points="9.6 20.4 15 15 20.4 9.6"></polyline>
+            <polyline id="Path" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" points="9.6 9.6 15 15 20.4 20.4"></polyline>
         </g>
     </g>
 </svg>

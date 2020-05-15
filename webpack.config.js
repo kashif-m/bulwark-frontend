@@ -31,8 +31,12 @@ module.exports = {
         use: ['style-loader', 'css-loader', 'sass-loader']
       },
       {
-        test: /.(ttf|otf|svg|png|jpg|jpeg|mp4)/,
+        test: /.(ttf|otf|png|jpg|jpeg|mp4)/,
         use: 'file-loader'
+      },
+      {
+        test: /\.svg$/,
+        use: ['@svgr/webpack']
       }
     ]
   },

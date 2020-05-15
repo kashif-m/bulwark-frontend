@@ -1,6 +1,15 @@
 
 import React, { Component } from 'react'
 
+// SVG
+import AccountIcon from '../assets/images/account.svg'
+import AddIcon from '../assets/images/add.svg'
+import BlockchainIcon from '../assets/images/blockchain.svg'
+import ClaimIcon from '../assets/images/claim.svg'
+import DashboardIcon from '../assets/images/dashboard.svg'
+import InfoIcon from '../assets/images/info.svg'
+import WalletIcon from '../assets/images/wallet.svg'
+
 class Dash extends Component {
 
 	state = {
@@ -8,18 +17,26 @@ class Dash extends Component {
 	}
 
 	renderClaims = () => {
+		const [user] = this.props.user
+		console.log(user)
 		return (
 			<div className="claims">
 				<div className="heading">View Claims</div>
 				<div className="info">
-					<img src={require('../assets/images/info.svg')} alt="" />
+					<InfoIcon />
 					<span>All your claims as recorded on the blockchain.</span>
 				</div>
 				<div className="options">
-					<div className="option">Claim history</div>
-					<div className="option">Current claims</div>
-					<div className="option">Approved claims</div>
-					<div className="option">Rejected claims</div>
+					<div className="option">
+						<AddIcon />
+						Insurance Claim
+					</div>
+					{
+						user.claims ?
+						<div className="option">
+							<div className="heading">Current Claims</div>
+						</div> : null
+					}
 				</div>
 			</div>
 		)
@@ -31,7 +48,7 @@ class Dash extends Component {
 			<div className="account">
 				<div className="heading">Account Details</div>
 				<div className="info">
-					<img src={require('../assets/images/info.svg')} alt="" />
+					<InfoIcon />
 					<span>Your details as recorded on the blockchain.</span>
 				</div>
 				<div className="options">
@@ -58,7 +75,7 @@ class Dash extends Component {
 			<div className="overview">
 				<div className="heading">Overview</div>
 				<div className="info">
-					<img src={require('../assets/images/info.svg')} alt="" />
+					<InfoIcon />
 					<span>An overview of your account.</span>
 				</div>
 			</div>
@@ -70,7 +87,7 @@ class Dash extends Component {
 			<div className="blockchain">
 				<div className="heading">Blockchain</div>
 				<div className="info">
-					<img src={require('../assets/images/info.svg')} alt="" />
+					<InfoIcon />
 					<span>The blockchain itself.</span>
 				</div>
 			</div>
@@ -83,7 +100,7 @@ class Dash extends Component {
 			<div className="wallet">
 				<div className="heading">Your Wallet</div>
 				<div className="info">
-					<img src={require('../assets/images/info.svg')} alt="" />
+					<InfoIcon />
 					<span>Credits in your wallet.</span>
 				</div>
 				<div className="options">
@@ -132,27 +149,27 @@ class Dash extends Component {
 					<div className="options">
 						<div className={`option${selectedOption === 'overview' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'overview'})} >
-							<img src={require('../assets/images/dashboard.svg')} alt="" />
+							<DashboardIcon />
 							<span>Overview</span>
 						</div>
 						<div className={`option${selectedOption === 'claims' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'claims'})} >
-							<img src={require('../assets/images/claim.svg')} alt="" />
+							<ClaimIcon />
 							<span>Claims</span>
 						</div>
 						<div className={`option${selectedOption === 'account' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'account'})} >
-							<img src={require('../assets/images/account.svg')} alt="" />
+							<AccountIcon />
 							<span>Account</span>
 						</div>
 						<div className={`option${selectedOption === 'wallet' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'wallet'})} >
-							<img src={require('../assets/images/wallet.svg')} alt="" />
+							<WalletIcon />
 							<span>Wallet</span>
 						</div>
 						<div className={`option${selectedOption === 'blockchain' ? ' selected' : ''}`}
 							onClick={() => this.setState({selectedOption: 'blockchain'})} >
-							<img src={require('../assets/images/blockchain.svg')} alt="" />
+							<BlockchainIcon />
 							<span>Blockchain</span>
 						</div>
 					</div>

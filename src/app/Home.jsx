@@ -2,6 +2,10 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
+// SVG
+import CloseIcon from '../assets/images/close.svg'
+import CrossIcon from '../assets/images/cross.svg'
+
 const Home = props => {
 
 	const [authScreen, setAuthScreen] = useState(false)
@@ -60,8 +64,7 @@ const Home = props => {
 			<div className="login-form">
 				<div className="heading">
 					Enter your credentials
-					<img src={require('../assets/images/close.svg')} alt="x"
-						onClick={() => setAuthScreen(false)} />
+					<CloseIcon onClick={() => setAuthScreen(false)} />
 				</div>
 				<label>E-MAIL</label>
 				<input id='email' type="email" placeholder='Registered e-mail' />
@@ -73,7 +76,7 @@ const Home = props => {
 						<div className="err"
 							onClick={() => setErr(false)} >
 							{err}
-							<img src={require('../assets/images/cross.svg')} alt="" />
+							<CrossIcon />
 						</div>
 					: null
 				}
@@ -85,8 +88,7 @@ const Home = props => {
 			<div className="signup-form">
 				<div className="heading">
 					Enter your details
-					<img src={require('../assets/images/close.svg')} alt="x"
-						onClick={() => setAuthScreen(false)} />
+					<CloseIcon onClick={() => setAuthScreen(false)} />
 				</div>
 				<label>E-MAIL</label>
 				<input type="text" id="email" placeholder='Your e-mail' />
@@ -102,7 +104,7 @@ const Home = props => {
 						<div className="err"
 							onClick={() => setErr(false)} >
 							{err}
-							<img src={require('../assets/images/cross.svg')} alt="" />
+							<CrossIcon />
 						</div>
 					: null
 				}
