@@ -2,8 +2,8 @@
 import React, { Component } from 'react'
 import { hot } from 'react-hot-loader/root'
 
-import Dash from './app/Dash.jsx'
-import Home from './app/Home.jsx'
+import Dash from './components/Dash.jsx'
+import Home from './components/Home.jsx'
 
 class App extends Component {
 

@@ -10,14 +10,21 @@ import DashboardIcon from '../assets/images/dashboard.svg'
 import InfoIcon from '../assets/images/info.svg'
 import WalletIcon from '../assets/images/wallet.svg'
 
+// components
+import ClaimForm from './ClaimForm.jsx'
+
 class Dash extends Component {
 
 	state = {
-		selectedOption: 'wallet'
+		selectedOption: 'wallet',
+		viewClaimForm: false
 	}
+
+	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
 
 	renderClaims = () => {
 		const [user] = this.props.user
+		const {viewClaimForm} = this.state
 		console.log(user)
 		return (
 			<div className="claims">
@@ -27,7 +34,8 @@ class Dash extends Component {
 					<span>All your claims as recorded on the blockchain.</span>
 				</div>
 				<div className="options">
-					<div className="option">
+					<div className="option"
+						onClick={() => this.setState({viewClaimForm: true})} >
 						<AddIcon />
 						Insurance Claim
 					</div>
@@ -38,6 +46,13 @@ class Dash extends Component {
 						</div> : null
 					}
 				</div>
+				{
+					viewClaimForm ?
+						<ClaimForm
+							updateClaimFormView={this.updateClaimFormView}
+							user={user} />
+					: null
+				}
 			</div>
 		)
 	}
