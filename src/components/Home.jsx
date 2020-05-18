@@ -28,8 +28,10 @@ const Home = props => {
 		axios.post('http://localhost:5000/user/new', data)
 			.then(res => {
 				console.log(res.data)
-				if(res.data.msg)
+				if(res.data.msg) {
 					setAuthScreen('login')
+					setErr(false)
+				}
 			})
 			.catch(err => {
 				if(err.response.data.err)
@@ -49,12 +51,10 @@ const Home = props => {
 
 		axios.post('http://localhost:5000/user/login', data)
 			.then(res => {
-				if(res.data.user)
-					props.updateUser(res.data.user)
+				if(res.data.user) props.updateUser(res.data.user)
 			})
 			.catch(err => {
-				if(err.response.data.err)
-					setErr(err.response.data.err)
+				if(err.response.data.err) setErr(err.response.data.err)
 			})
 	}
 

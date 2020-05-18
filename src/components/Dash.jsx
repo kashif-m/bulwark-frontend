@@ -12,20 +12,98 @@ import WalletIcon from '../assets/images/wallet.svg'
 
 // components
 import ClaimForm from './ClaimForm.jsx'
+import InsuranceForm from './InsuranceForm.jsx'
 
 class Dash extends Component {
 
 	state = {
-		selectedOption: 'wallet',
-		viewClaimForm: false
+		selectedOption: 'overview',
+		viewClaimForm: false,
+		readable: '2 years'
 	}
 
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
 
+	isEmpty = id => document.getElementById(id) ? document.getElementById(id).value.length === 0 : false
+
+	getReadable = value => {
+
+		let years, months, str
+
+		if(value.length === 0) str = '  Put some numbers in.'
+		else {
+			years = parseInt(value / 12)
+			months = value % 12
+			
+			str = years !== 0 ? years === 1 ? '- 1 year '
+			: years > 100 ? '  Are you fucking kidding me? x_x' : `- ${years} years `
+			: ''
+			
+			if(str.length === 0 && (months > 1)) str += '-'
+			if(years < 100)
+			str += months !== 0 ? months === 1 ? ' 1 mon.'
+			: months > 1 ? ` ${parseFloat(months).toFixed(0)} mons.` : `~ ${parseFloat(months*30).toFixed(0)} days`
+			: ''
+			
+			str = str.length === 0 ? '  Are you fucking kidding me? x_x' : str
+		}
+
+		return str
+	}
+
+	updateInsuranceDetails = () => {
+
+	}
+
+	renderConfigureScreen = () => {
+		const {readable, submitDisabled} = this.state
+		const [user] = this.props.user
+		return (
+			<div className="configure">
+				<div className="heading">Let's get started</div>
+				<div className="info">
+					<InfoIcon />
+					Vehicle details and corresponding Insurance details cannot be modified once submitted.
+				</div>
+				<div className="inputs">
+
+					<div className="subheading">Vehicle Details</div>
+					<label>Vehicle Name</label>
+					<input type="text" id='vehicle' />
+					<label>Vehicle Number</label>
+					<input type="text" id='number' />
+					<label>Vehicle Type</label>
+					<select name="vehicle-type" id="vehicle-type">
+						<option value="two">2 Wheeler</option>
+						<option value="three">3 Wheeler</option>
+						<option value="four">4 Wheeler</option>
+						<option value="six">6 Wheeler</option>
+					</select>
+
+					<div className="subheading">Personal Details</div>
+					<label>Driving License Number</label>
+					<input type="text" id='license' />
+					<label>Name</label>
+					<input type="text" id='name' defaultValue={user.name} />
+
+					<div className="subheading">Insurance Details</div>
+					<span>
+						<label>Insurance Period [months]</label>
+						<input type="number" id='period' defaultValue={24}
+							onChange={() => this.setState({readable: this.getReadable(document.getElementById('period').value)})} />
+						<span className="readable">{readable}</span>
+					</span>
+
+				</div>
+				<div className='submit'
+					onClick={() => updateInsuranceDetails()}> SUBMIT</div>
+			</div>
+		)
+	}
+
 	renderClaims = () => {
 		const [user] = this.props.user
 		const {viewClaimForm} = this.state
-		console.log(user)
 		return (
 			<div className="claims">
 				<div className="heading">View Claims</div>
@@ -150,6 +228,7 @@ class Dash extends Component {
 
 		const [user, updateUser] = this.props.user
 		const {selectedOption} = this.state
+		console.log(user)
 
 		return (
 			<div className='dash' >
@@ -162,37 +241,47 @@ class Dash extends Component {
 				</div>
 				<div className="side-menu">
 					<div className="options">
-						<div className={`option${selectedOption === 'overview' ? ' selected' : ''}`}
-							onClick={() => this.setState({selectedOption: 'overview'})} >
-							<DashboardIcon />
-							<span>Overview</span>
-						</div>
-						<div className={`option${selectedOption === 'claims' ? ' selected' : ''}`}
-							onClick={() => this.setState({selectedOption: 'claims'})} >
-							<ClaimIcon />
-							<span>Claims</span>
-						</div>
-						<div className={`option${selectedOption === 'account' ? ' selected' : ''}`}
-							onClick={() => this.setState({selectedOption: 'account'})} >
-							<AccountIcon />
-							<span>Account</span>
-						</div>
-						<div className={`option${selectedOption === 'wallet' ? ' selected' : ''}`}
-							onClick={() => this.setState({selectedOption: 'wallet'})} >
-							<WalletIcon />
-							<span>Wallet</span>
-						</div>
-						<div className={`option${selectedOption === 'blockchain' ? ' selected' : ''}`}
-							onClick={() => this.setState({selectedOption: 'blockchain'})} >
-							<BlockchainIcon />
-							<span>Blockchain</span>
-						</div>
+						{
+							user.configured ?
+							<React.Component>
+								<div className={`option${selectedOption === 'overview' ? ' selected' : ''}`}
+									onClick={() => this.setState({selectedOption: 'overview'})} >
+									<DashboardIcon />
+									<span>Overview</span>
+								</div>
+								<div className={`option${selectedOption === 'account' ? ' selected' : ''}`}
+									onClick={() => this.setState({selectedOption: 'account'})} >
+									<AccountIcon />
+									<span>Account</span>
+								</div>
+								<div className={`option${selectedOption === 'claims' ? ' selected' : ''}`}
+									onClick={() => this.setState({selectedOption: 'claims'})} >
+									<ClaimIcon />
+									<span>Claims</span>
+								</div>
+								<div className={`option${selectedOption === 'wallet' ? ' selected' : ''}`}
+									onClick={() => this.setState({selectedOption: 'wallet'})} >
+									<WalletIcon />
+									<span>Wallet</span>
+								</div>
+								<div className={`option${selectedOption === 'blockchain' ? ' selected' : ''}`}
+									onClick={() => this.setState({selectedOption: 'blockchain'})} >
+									<BlockchainIcon />
+									<span>Blockchain</span>
+								</div>
+							</React.Component>
+							: <div className="option selected">
+								<AccountIcon />
+								<span>Insurance</span>
+							</div>
+						}
 					</div>
 				</div>
 				{
-					selectedOption === 'overview' ? this.renderOverview()
+					selectedOption === 'account' ? this.renderAccountDetails()
+					: !user.configured ? this.renderConfigureScreen()
+					: selectedOption === 'overview' ? this.renderOverview()
 					: selectedOption === 'claims' ? this.renderClaims()
-					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'wallet' ? this.renderWallet()
 					: selectedOption === 'blockchain' ? this.renderBlockchain()
 					: null
