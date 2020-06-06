@@ -12,94 +12,20 @@ import WalletIcon from '../assets/images/wallet.svg'
 
 // components
 import ClaimForm from './ClaimForm.jsx'
-import InsuranceForm from './InsuranceForm.jsx'
+import InitialForm from './forms/InitialForm.jsx'
+// import InsuranceForm from './forms/InsuranceForm.jsx'
 
 class Dash extends Component {
 
-	state = {
-		selectedOption: 'overview',
-		viewClaimForm: false,
-		readable: '2 years'
+	constructor(props) {
+		super(props)
+		this.state = {
+			selectedOption: 'overview',
+			viewClaimForm: false
+		}
 	}
 
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
-
-	isEmpty = id => document.getElementById(id) ? document.getElementById(id).value.length === 0 : false
-
-	getReadable = value => {
-
-		let years, months, str
-
-		if(value.length === 0) str = '  Put some numbers in.'
-		else {
-			years = parseInt(value / 12)
-			months = value % 12
-			
-			str = years !== 0 ? years === 1 ? '- 1 year '
-			: years > 100 ? '  Are you fucking kidding me? x_x' : `- ${years} years `
-			: ''
-			
-			if(str.length === 0 && (months > 1)) str += '-'
-			if(years < 100)
-			str += months !== 0 ? months === 1 ? ' 1 mon.'
-			: months > 1 ? ` ${parseFloat(months).toFixed(0)} mons.` : `~ ${parseFloat(months*30).toFixed(0)} days`
-			: ''
-			
-			str = str.length === 0 ? '  Are you fucking kidding me? x_x' : str
-		}
-
-		return str
-	}
-
-	updateInsuranceDetails = () => {
-
-	}
-
-	renderConfigureScreen = () => {
-		const {readable, submitDisabled} = this.state
-		const [user] = this.props.user
-		return (
-			<div className="configure">
-				<div className="heading">Let's get started</div>
-				<div className="info">
-					<InfoIcon />
-					Vehicle details and corresponding Insurance details cannot be modified once submitted.
-				</div>
-				<div className="inputs">
-
-					<div className="subheading">Vehicle Details</div>
-					<label>Vehicle Name</label>
-					<input type="text" id='vehicle' />
-					<label>Vehicle Number</label>
-					<input type="text" id='number' />
-					<label>Vehicle Type</label>
-					<select name="vehicle-type" id="vehicle-type">
-						<option value="two">2 Wheeler</option>
-						<option value="three">3 Wheeler</option>
-						<option value="four">4 Wheeler</option>
-						<option value="six">6 Wheeler</option>
-					</select>
-
-					<div className="subheading">Personal Details</div>
-					<label>Driving License Number</label>
-					<input type="text" id='license' />
-					<label>Name</label>
-					<input type="text" id='name' defaultValue={user.name} />
-
-					<div className="subheading">Insurance Details</div>
-					<span>
-						<label>Insurance Period [months]</label>
-						<input type="number" id='period' defaultValue={24}
-							onChange={() => this.setState({readable: this.getReadable(document.getElementById('period').value)})} />
-						<span className="readable">{readable}</span>
-					</span>
-
-				</div>
-				<div className='submit'
-					onClick={() => updateInsuranceDetails()}> SUBMIT</div>
-			</div>
-		)
-	}
 
 	renderClaims = () => {
 		const [user] = this.props.user
@@ -155,7 +81,7 @@ class Dash extends Component {
 					<div className="option">
 						<div className="heading">Digital Documents</div>
 						<div className="h dd">Vehicle License</div>
-						<div className="v dd">{user.documents.license}</div>
+						<div className="v dd">{user.dl}</div>
 					</div>
 				</div>
 			</div>
@@ -243,7 +169,7 @@ class Dash extends Component {
 					<div className="options">
 						{
 							user.configured ?
-							<React.Component>
+							<React.Fragment>
 								<div className={`option${selectedOption === 'overview' ? ' selected' : ''}`}
 									onClick={() => this.setState({selectedOption: 'overview'})} >
 									<DashboardIcon />
@@ -269,7 +195,7 @@ class Dash extends Component {
 									<BlockchainIcon />
 									<span>Blockchain</span>
 								</div>
-							</React.Component>
+							</React.Fragment>
 							: <div className="option selected">
 								<AccountIcon />
 								<span>Insurance</span>
@@ -278,8 +204,8 @@ class Dash extends Component {
 					</div>
 				</div>
 				{
-					selectedOption === 'account' ? this.renderAccountDetails()
-					: !user.configured ? this.renderConfigureScreen()
+					!user.configured ? <InitialForm user={[user, updateUser]} />
+					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'overview' ? this.renderOverview()
 					: selectedOption === 'claims' ? this.renderClaims()
 					: selectedOption === 'wallet' ? this.renderWallet()

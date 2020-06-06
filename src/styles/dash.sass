@@ -1,4 +1,5 @@
 .dash
+	@import ./initial-form
 	height: 100%
 	display: grid
 	grid-template-columns: min-content auto
@@ -107,17 +108,17 @@
 					border-bottom: 2px solid $gray_platinum
 				.h
 					font:
-						family: HammersmithOne
-						size: 17
+						family: MontserratBold
+						size: 16
 					margin: 15 0 0 10
 				.v
 					padding: 10 20
 					width: min-content
-					background-color: #F6F6F0
+					background-color: #F6F6F6
 					margin: 5 0 0 10
 					font:
 						family: monospace
-						size: 15
+						size: 20
 				.dd
 					cursor: pointer
 
@@ -152,79 +153,3 @@
 						span
 							justify-self: flex-start
 							padding-left: 20
-
-	.configure
-		margin: 20 0 0 40
-		.heading
-			font:
-				family: MontserratBold
-				size: 35
-		.info
-			display: flex
-			align-items: center
-			margin: 5 0 0 5
-			font-size: 12
-			svg
-				margin-right: 5
-
-		.inputs
-			display: grid
-			grid-auto-flow: row
-			margin: 20 0 0 5
-			& > *
-				width: max-content
-			.subheading
-				width: max-content
-				border-bottom: 1px solid $gray_platinum
-				margin: 20 0 5 0
-				font:
-					family: MontserratBold
-					size: 23
-			input, select
-				cursor: pointer
-				border: 1px solid $gray_platinum
-				background-color: white
-				margin-left: 10
-				padding: 8 15
-				border-radius: 2px
-				font:
-					family: MavenProMedium
-					size: 15
-
-				transition: .3s all
-
-				&:hover, &:focus
-					background-color: #F8F8FF
-					transition: .15s all
-			label
-				display: inline
-				margin: 10 0 10 10
-				font-size: 17
-			#period
-				border: 0
-				border-bottom: 2px solid $gray_platinum
-				background-color: white
-				font:
-					family: MontserratBold
-					size: 20
-				width: 5ch
-				padding: 0 0 5 5
-				margin-left: 20
-			.readable
-				font:
-					family: MontserratBold
-					size: 25
-				margin-left: 20
-
-		.submit
-			cursor: pointer
-			width: max-content
-			background-color: $green_spring
-			margin-top: 50
-			color: white
-			padding: 10 40
-			border-radius: 2px
-			border: 0
-			font:
-				family: MontserratBold
-				size: 18

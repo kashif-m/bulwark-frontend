@@ -11,18 +11,20 @@ const Home = props => {
 	const [authScreen, setAuthScreen] = useState(false)
 	const [err, setErr] = useState(false)
 
+	useEffect(() => {
+		if(!authScreen) setErr(false)
+	}, [authScreen])
+
 	const createUser = () => {
 
 		const email = document.getElementById('email').value
 		const password = document.getElementById('password').value
 		const name = document.getElementById('name').value
-		const license = document.getElementById('license').value
 
 		const data = {
 			email,
 			password,
-			name,
-			license
+			name
 		}
 
 		axios.post('http://localhost:5000/user/new', data)
@@ -34,8 +36,10 @@ const Home = props => {
 				}
 			})
 			.catch(err => {
-				if(err.response.data.err)
-					setErr(err.response.data.err)
+				if(err.response) {
+					if(err.response.data.err) setErr(err.response.data.err)
+				}
+				else setErr('Could not connect to bulwark-backend.')
 			})
 	}
 
@@ -52,9 +56,13 @@ const Home = props => {
 		axios.post('http://localhost:5000/user/login', data)
 			.then(res => {
 				if(res.data.user) props.updateUser(res.data.user)
+				console.log('updated')
 			})
 			.catch(err => {
-				if(err.response.data.err) setErr(err.response.data.err)
+				if(err.response) {
+					if(err.response.data.err) setErr(err.response.data.err)
+				}
+				else setErr('Could not connect to bulwark-backend.')
 			})
 	}
 
@@ -96,8 +104,6 @@ const Home = props => {
 				<input type="password" id="password" placeholder='Choose a strong password' />
 				<label>NAME</label>
 				<input type="text" id="name" placeholder='Full name as per records' />
-				<label>DRIVING LICENSE #</label>
-				<input type="text" id="license" placeholder='DL # as per records' />
 
 				{
 					err ?
