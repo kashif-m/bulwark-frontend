@@ -1,5 +1,6 @@
 
 import React, { Component } from 'react'
+import axios from 'axios'
 
 // SVG
 import AccountIcon from '../assets/images/account.svg'
@@ -26,6 +27,57 @@ class Dash extends Component {
 	}
 
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
+
+	payPremium = () => {
+		const [user, updateUser] = this.props.user
+		console.log(user)
+		const data = {
+			vehicleNo: user.insurance.vehicle.number,
+			insurance_period: user.insurance.period
+		}
+		axios.post('http://localhost:5000/insurance/new', {data}, {headers: {Authorization: user.token}})
+			.then(res => {
+				if(!res || !res.data) console.log({err: 'could not receive from backend'})
+				else res.data.user ? updateUser(res.data.user) : null
+			})
+			.catch(err => console.log(err.response.data))
+	}
+
+	renderPayPremiumPage = () => {
+		const [user, updateUser] = this.props.user
+		const insurance = user.insurance
+		const vehicle = insurance.vehicle
+
+		return (
+			<div className="pay-premium">
+				<div className="heading">Pay Premium</div>
+				<div className="info">
+					<InfoIcon />
+					<span>This amount will be deducted from your bulwark wallet.</span>
+				</div>
+				<div className="options">
+					<div className="total">
+						<span className="heading">Amount to be paid</span>
+						<span className="value">{user.payPremium} ETH</span>
+					</div>
+					<div className="insurance-info">
+						<div className='heading'>For the following vehicle and insurance period</div>
+						<div className="edit" onClick={() => {
+							const temp = {...user}
+							temp.configured = false
+							updateUser(temp)
+						}} >edit</div>
+						<div className="vehicle-details">
+							<div>Vehicle - {vehicle.name}</div>
+							<div>Type - {vehicle.wheels} Wheeler</div>
+							<div>Insurance Period - {insurance.period} months</div>
+						</div>
+					</div>
+					<div className="submit" onClick={() => this.payPremium()}>PROCEED</div>
+				</div>
+			</div>
+		)
+	}
 
 	renderClaims = () => {
 		const [user] = this.props.user
@@ -168,7 +220,7 @@ class Dash extends Component {
 				<div className="side-menu">
 					<div className="options">
 						{
-							user.configured ?
+							user.configured && user.insurance.insured ?
 							<React.Fragment>
 								<div className={`option${selectedOption === 'overview' ? ' selected' : ''}`}
 									onClick={() => this.setState({selectedOption: 'overview'})} >
@@ -205,6 +257,7 @@ class Dash extends Component {
 				</div>
 				{
 					!user.configured ? <InitialForm user={[user, updateUser]} />
+					: user.configured && !user.insurance.insured ? this.renderPayPremiumPage()
 					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'overview' ? this.renderOverview()
 					: selectedOption === 'claims' ? this.renderClaims()

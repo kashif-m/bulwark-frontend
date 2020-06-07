@@ -48,15 +48,15 @@
 				&.selected
 					background-color: $gray_platinum
 
-	.claims, .account, .overview, .wallet, .blockchain
+	.claims, .account, .overview, .wallet, .blockchain, .pay-premium
 		display: flex
 		flex-flow: column
 		padding: 20 0 0 30
-		.heading
+		& > .heading
 			font:
 				size: 30
 				family: MontserratBold
-		.info
+		& > .info
 			display: flex
 			align-items: center
 			svg
@@ -73,17 +73,18 @@
 			.option:first-of-type
 				svg
 					margin-right: 10
-					fill-rule: evenodd
 					& path
-						fill-rule: evenodd
+						transition: .3s all
 						fill: $black_rich
-				border: 2px solid $black_rich
-				border-radius: 3px
+				border: 1px solid $black_rich
+				border-radius: 2px
 				background-color: white
 				color: $black_rich
 				padding: 5 15
 				margin-bottom: 20
+				transition: .3s all
 				&:hover
+					transition: .15s all
 					background-color: $black_rich
 					color: white
 					svg path, svg
@@ -112,13 +113,17 @@
 						size: 16
 					margin: 15 0 0 10
 				.v
-					padding: 10 20
+					cursor: pointer
+					padding: 8 15
 					width: min-content
-					background-color: #F6F6F6
-					margin: 5 0 0 10
+					border: 1px solid black
+					border-radius: 2px
+					margin: 15 0 0 10
 					font:
 						family: monospace
-						size: 20
+						size: 15
+					&:hover
+						background-color: #F6F6FE
 				.dd
 					cursor: pointer
 
@@ -153,3 +158,64 @@
 						span
 							justify-self: flex-start
 							padding-left: 20
+
+	.pay-premium
+		.options
+			padding-left: 50
+			.total
+				margin: 50 0 30 0
+				display: flex
+				align-items: center
+				.heading
+					font:
+						size: 20
+				.value
+					cursor: pointer
+					margin-left: 30
+					display: flex
+					justify-content: center
+					align-items: center
+					font:
+						family: MontserratBold
+						size: 30
+			& > .insurance-info
+				display: grid
+				grid-template-columns: repeat(2, max-content)
+				grid-auto-rows: max-content
+				color: #5A5A5A
+				margin: 0 0 30 20
+				.edit
+					font-size: 13
+					background-color: #5A5A5A
+					border-radius: 3px
+					color: white
+					margin-left: 20
+					padding: 3 15
+					cursor: pointer
+					grid-column: -2 / -1
+					transition: .3s all
+					&:hover
+						background-color: #3A3A3A
+						transition: .15s all
+				.heading, .vehicle-details
+					align-self: center
+					font:
+						family: MontserratRegular
+						size: 14
+				.vehicle-details
+					margin-left: 20
+
+			.submit
+				cursor: pointer
+				font:
+					family: MontserratBold
+					size: 18
+				background-color: $green_spring
+				padding: 10 40
+				color: white
+				border-radius: 2px
+				width: min-content
+				transition: .3s all
+				&:hover
+					transition: .15s all
+		            background-color: black

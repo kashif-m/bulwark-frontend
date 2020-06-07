@@ -17,7 +17,7 @@ const InitialForm = props => {
         },
         vehicle: {
             name: '',
-            type: '',
+            wheels: 2,
             number: ''
         },
         insurance: {
@@ -40,11 +40,10 @@ const InitialForm = props => {
 			years = parseInt(value / 12)
 			months = value % 12
 
-			str = years !== 0 ? years === 1 ? '- 1 year '
-			: years > 100 ? '  Are you fucking kidding me? x_x' : `- ${years} years `
+			str = years !== 0 ? years === 1 ? ' 1 year '
+			: years > 100 ? '  Are you fucking kidding me? x_x' : ` ${years} years `
 			: ''
 
-			if(str.length === 0 && (months > 1)) str += '-'
 			if(years < 100)
 			str += months !== 0 ? months === 1 ? ' 1 mon.'
 			: months > 1 ? ` ${parseFloat(months).toFixed(0)} mons.` : `~ ${parseFloat(months*30).toFixed(0)} days`
@@ -56,16 +55,16 @@ const InitialForm = props => {
 		return str
 	}
 
-    const registerInsuranceDetails = () => {
+    const updateUserDetails = () => {
 
-        const insuranceData = {
+        const userData = {
             dl: data.user.dl,
             insurance: {
                 period: data.insurance.period,
                 vehicle: data.vehicle
             }
         }
-        axios.post('http://localhost:5000/insurance/new', {insuranceData}, { headers: { Authorization: user.token } })
+        axios.post('http://localhost:5000/user/details', {userData}, { headers: { Authorization: user.token } })
             .then(res => {
                 if(res.data.user) updateUser(res.data.user)
             })
@@ -96,11 +95,11 @@ const InitialForm = props => {
                     onChange={event => updateData('number', event.target.value) } />
                 <label>Vehicle Type</label>
                 <select name="vehicle-type"
-                    onChange={event => updateData('type', event.target.value) } >
-                    <option value="two">2 Wheeler</option>
-                    <option value="three">3 Wheeler</option>
-                    <option value="four">4 Wheeler</option>
-                    <option value="six">6 Wheeler</option>
+                    onChange={event => updateData('wheels', event.target.value) } >
+                    <option value="2">2 Wheeler</option>
+                    <option value="3">3 Wheeler</option>
+                    <option value="4">4 Wheeler</option>
+                    <option value="6">6 Wheeler</option>
                 </select>
             </div>
         )
@@ -112,7 +111,7 @@ const InitialForm = props => {
                 <label>Insurance Period [months]</label>
                 <input type="number" defaultValue={data.insurance.period}
                     onChange={event => {
-                        updateData('period', event.target.value ? event.target.value : 0)
+                        updateData('period', event.target.value ? parseInt(event.target.value) : 0)
                         setReadable(getReadable(event.target.value))
                     }} />
                 <span className="readable">{readable}</span>
@@ -122,7 +121,7 @@ const InitialForm = props => {
 
     const renderSubmitButton = () => <div className={`submit${data.insurance.period == 0 ? ' disabled' : ''}`}
                                             disabled={data.insurance.period == 0}
-                                            onClick={() => registerInsuranceDetails()} >SUBMIT</div>
+                                            onClick={() => updateUserDetails()} >SUBMIT</div>
     const renderNextButton = () => <div className="next"
                                             onClick={() => setForm(form === 'user' ? 'vehicle'
                                                                     : form === 'vehicle' ? 'insurance'

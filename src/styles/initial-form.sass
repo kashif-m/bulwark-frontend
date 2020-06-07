@@ -17,15 +17,19 @@
 
     .next
         cursor: pointer
-        margin: 30 20 0 0
-        align-self: flex-end
-        background-color: #313131
+        margin-top: 50
+        align-self: flex-start
+        background-color: $green_spring
         color: white
         padding: 10 40
         border-radius: 2px
+        font:
+            family: MontserratBold
+            size: 18
+
         transition: .3s all
         &:hover
-            background-color: black
+            background-color: #1BAA4B
             transition: .15s all
 
     .personal-details, .vehicle-details
@@ -37,7 +41,7 @@
         label
             font:
                 family: MontserratRegular
-                size: 20
+                size: 18
         input, select
             cursor: pointer
             border: 1px solid $gray_platinum
@@ -75,6 +79,7 @@
             margin-left: 20
 
     .submit
+        align-self: flex-start
         cursor: pointer
         width: max-content
         background-color: $green_spring
