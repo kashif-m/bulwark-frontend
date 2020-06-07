@@ -177,7 +177,7 @@ class Dash extends Component {
 				<div className="options">
 					<div className="option">
 						<div className="heading">Total credits</div>
-						<div className="val">{user.wallet.credits} ETH</div>
+						<div className="val">{user.wallet.credits.toFixed(4)} ETH</div>
 					</div>
 					<div className="option">
 						<div className="heading">Transaction history</div>
