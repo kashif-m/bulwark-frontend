@@ -68,7 +68,7 @@ const InitialForm = props => {
             .then(res => {
                 if(res.data.user) updateUser(res.data.user)
             })
-            .err(err => console.log(err.response.data))
+            .catch(err => console.log(err))
 	}
 
 	const personalDetails = () => {

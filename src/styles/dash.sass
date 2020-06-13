@@ -103,27 +103,30 @@
 			margin-left: 10
 			.option
 				.heading
+					font:
+						family: MontserratBold
 					padding: 20 20 5 0
 					width: max-content
 					font-size: 20
 					border-bottom: 2px solid $gray_platinum
 				.h
 					font:
-						family: MontserratBold
 						size: 16
 					margin: 15 0 0 10
 				.v
 					cursor: pointer
 					padding: 8 15
 					width: min-content
-					border: 1px solid black
-					border-radius: 2px
+					border: 1px solid $gray_platinum
+					border-radius: 1px
 					margin: 15 0 0 10
 					font:
 						family: monospace
 						size: 15
+					transition: all .3s
 					&:hover
-						background-color: #F6F6FE
+						transition: all .15s
+						background-color: $gray_platinum
 				.dd
 					cursor: pointer
 
