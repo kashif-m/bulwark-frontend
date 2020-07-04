@@ -1,102 +1,130 @@
 .home
 	display: grid
 	grid-template-rows: max-content auto
-	grid-template-columns: 75vw 25vw
 	color: $black_rich
 	height: 100%
+	background-image: url('../assets/images/bulwark-cover.png')
+	background-repeat: no-repeat
+	background-size: cover
 	.header
-		width: 100%
-		background-color: $blue_celtic
-		color: white
-		padding: 50 0
-		text-align: center
-		font:
-			family: HammersmithOne
-			size: 40
-	.body
-		padding: 80 40 0 0
-		font:
-			family: Varela
-			size: 24
-		justify-self: flex-end
-		width: 700
-	.side
-		grid-column: 2 / 3
-		grid-row: 1 / -1
-		height: 100%
-		width: 100%
-		padding-top: 100
-		font-size: 15
-		border-left: 1px solid $gray_platinum
+		padding: 30 20vw
 		display: flex
-		flex-flow: column
 		align-items: center
+		color: $blue_celtic
+		font:
+			family: ProductSansRegular
+			size: 40
+			weight: 900
 		span
-			font-family: Varela
-			font-size: 18
-		.login
-			margin-top: 5
-			cursor: pointer
-			width: max-content
-			font-size: 20
-			border-radius: 2px
-			font-weight: 900
-			padding-left: 10
-
+			margin-left: 20
 		.sign-up
 			cursor: pointer
-			margin-top: 25
-			padding: 10 100
-			border-radius: 2px
-			background-color: $black-rich
 			color: white
-			height: max-content
-			width: max-content
-			font-family: MontserratBold
+			background-color: $blue_celtic
+			font-size: 15
+			padding: 10 20 5 20
+			border-radius: 2px
+			margin-left: auto
+			transition: all .3s
+			&:hover
+				background-color: #2D5DE2
+				transition: all .1s
+	.main
+		display: flex
+		flex-flow: column
+		padding: 50 20vw 0 20vw
+		.info
+			justify-self: flex-start
+			font:
+				family: ProductSansRegular
+				size: 24
+			width: 500px
+			& > strong
+				font-size: 40
+			& > div
+				margin-top: 20
+				color: #1A1A1A
+		.sign-in
+			margin-top: 50
+			justify-self: flex-start
+			font:
+				family: ProductSansRegular
+				weight: 900
+				size: 18
+			span
+				width: max-content
+				cursor: pointer
+				background-color: $blue_celtic
+				border-radius: 2px
+				padding: 5 20 3 20
+				color: white
+			display: flex
+			flex-flow: column
+
+	.auth
+		position: absolute
+		z-index: 1
+		background-color: rgba(0,0,0, 0.8)
+		height: 100%
+		width: 100%
+		display: flex
+		align-items: center
+		justify-content: center
+		.login-form
+			grid-template-rows: max-content 30px repeat(5, max-content)
+		.signup-form
+			grid-template-rows: max-content 30px repeat(7, max-content)
 		.login-form, .signup-form
+			background-color: white
+			border-radius: 2px
+			padding: 10vh 80
 			display: grid
-			grid-template-rows: repeat(5, max-content) 30px max-content
 
 			.heading
+				// width: 285
 				display: flex
-				margin-bottom: 40
+				margin-bottom: 10
 				svg
 					cursor: pointer
-					margin-left: 30
+					position: relative
+					left: 65
+					bottom: 8vh
 				font:
-					family: MontserratBold
-					size: 25
+					family: ProductSansRegular
+					size: 30
+					weight: 900
 
-			input, label, .submit
-				margin-left: 20
-				width: max-content
+			label:first-of-type
+				margin-top: 20
 			label
-				margin-bottom: 10
+				width: 240
+				justify-self: center
+				margin: 0 0 10 10
 				font:
-					family: MontserratBold
+					family: ProductSansRegular
 					size: 15
+					weight: 600
 			input
+				justify-self: center
 				min-width: 25ch
 				padding: 10 20
 				border-radius: 2px
 				background-color: #F3F3F3
 				font:
-					family: Varela
+					family: ProductSansRegular
 					size: 14
 					weight: 100
-				&:first-of-type
-					margin-bottom: 20
+				margin-bottom: 20
 				&:last-of-type
 					margin-bottom: 15
 
 			.err
 				display: flex
+				justify-self: flex-start
+				align-self: center
 				background-color: $red
 				color: white
 				border-radius: 100px
-				justify-self: flex-start
-				align-self: center
-				margin-left: 20
 				padding: 3 15
 				cursor: pointer
 				font-size: 12
@@ -105,22 +133,19 @@
 					margin-left: 10
 
 			.submit
+				justify-self: center
 				grid-row: -2 / -1
 				cursor: pointer
-				background-color: black
-				margin-top: 15
+				background-color: $blue_celtic
+				margin-top: 30
 				border-radius: 2px
 				text-align: center
 				color: white
-				padding: 10 40
+				padding: 10 40 5 40
 				font:
 					size: 15
-					family: MontserratBold
-		.signup-form
-			grid-template-rows: repeat(7, max-content) 30px max-content !important
-			input
-				margin-bottom: 20
-
+					family: ProductSansRegular
+					weight: 900
 
 
 @media (max-width: 500px)

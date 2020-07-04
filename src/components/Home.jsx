@@ -3,6 +3,7 @@ import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
 // SVG
+import BulwarkLogo from '../assets/images/bulwarklogo.svg'
 import CloseIcon from '../assets/images/close.svg'
 import CrossIcon from '../assets/images/cross.svg'
 
@@ -67,6 +68,7 @@ const Home = props => {
 	}
 
 	const renderForm = () => {
+		console.log('asfhvashj')
 		return (
 			authScreen === 'login' ?
 			<div className="login-form">
@@ -74,11 +76,6 @@ const Home = props => {
 					Enter your credentials
 					<CloseIcon onClick={() => setAuthScreen(false)} />
 				</div>
-				<label>E-MAIL</label>
-				<input id='email' type="email" placeholder='Registered e-mail' />
-				<label>PASSWORD</label>
-				<input id='password' type="password" placeholder='Your password' />
-
 				{
 					err ?
 						<div className="err"
@@ -86,8 +83,12 @@ const Home = props => {
 							{err}
 							<CrossIcon />
 						</div>
-					: null
+					: <div></div>
 				}
+				<label>E-MAIL</label>
+				<input id='email' type="email" placeholder='Registered e-mail' />
+				<label>PASSWORD</label>
+				<input id='password' type="password" placeholder='Your password' />
 
 				<div className="submit"
 					onClick={() => verifyUser()} >LOGIN</div>
@@ -98,13 +99,6 @@ const Home = props => {
 					Enter your details
 					<CloseIcon onClick={() => setAuthScreen(false)} />
 				</div>
-				<label>E-MAIL</label>
-				<input type="text" id="email" placeholder='Your e-mail' />
-				<label>PASSWORD</label>
-				<input type="password" id="password" placeholder='Choose a strong password' />
-				<label>NAME</label>
-				<input type="text" id="name" placeholder='Full name as per records' />
-
 				{
 					err ?
 						<div className="err"
@@ -112,8 +106,14 @@ const Home = props => {
 							{err}
 							<CrossIcon />
 						</div>
-					: null
+					: <div></div>
 				}
+				<label>E-MAIL</label>
+				<input type="text" id="email" placeholder='Your e-mail' />
+				<label>PASSWORD</label>
+				<input type="password" id="password" placeholder='Choose a strong password' />
+				<label>NAME</label>
+				<input type="text" id="name" placeholder='Full name as per records' />
 
 				<div className="submit"
 					onClick={() => createUser()} >REGISTER</div>
@@ -124,31 +124,29 @@ const Home = props => {
 
 	return (
 		<div className='home' >
-			<div className="header">BULWARK</div>
-			<div className="body">
-				Crop insurance with blockchain technologies.
-				We use a blockchain system to strengthen our policies and your insurance claims.
-				{/* <img src={require('../assets/images/crops.png')} alt=""/> */}
+			{ authScreen ?
+				<div className='auth'> {renderForm()} </div>
+			: null }
+			<div className="header">
+				<BulwarkLogo />
+				<span>bulwark</span>
+				<span className="sign-up"
+					onClick={() => setAuthScreen('signup')} >
+					Sign Up</span>
 			</div>
-			<div className="side">
-				
-				{
-					!authScreen ?
-					<React.Fragment>
-						<div>
-							Already Registered?
-							<span className="login"
-								onClick={() => setAuthScreen('login')} >
-								Sign in
-							</span>
-						</div>
-						<div className="sign-up"
-							onClick={() => setAuthScreen('signup')} >
-							SIGN UP
-						</div>
-					</React.Fragment>
-					: renderForm()
-				}
+			<div className="main">
+				<div className="info">
+					<strong> Crop insurance with blockchain technologies. </strong>
+					<div>
+						We use a blockchain systems to strengthen our policies and your insurance claims.
+					</div>
+				</div>
+				<div className="sign-in">
+					Already Registered?
+					<span
+						onClick={() => setAuthScreen('login')} >
+						login</span>
+				</div>
 			</div>
 		</div>
 	)
