@@ -28,6 +28,11 @@ class Dash extends Component {
 
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
 
+	componentDidUpdate(prevProps, prevState) {
+		if(prevState.selectedOption !== this.state.selectedOption
+			&& this.state.viewClaimForm) this.setState({viewClaimForm: false})
+	}
+
 	payPremium = () => {
 		const [user, updateUser] = this.props.user
 		console.log(user)
@@ -124,16 +129,9 @@ class Dash extends Component {
 				</div>
 				<div className="options">
 					<div className="option">
-						<div className="heading">Keys</div>
-						<div className="h">Private Key</div>
-						<div className="v">{user.keys.private}</div>
-						<div className="h">Public Key</div>
+						<div className="heading">Address</div>
+						<div className="i"></div>
 						<div className="v">{user.keys.public}</div>
-					</div>
-					<div className="option">
-						<div className="heading">Digital Documents</div>
-						<div className="h dd">Vehicle License</div>
-						<div className="v dd">{user.dl}</div>
 					</div>
 				</div>
 			</div>

@@ -13,21 +13,40 @@ const InitialForm = props => {
     const [data, setData] = useState({
         user: {
             name: '',
-            license: ''
+            aadhar: ''
         },
-        vehicle: {
-            name: '',
-            wheels: 2,
-            number: ''
+        location: {
+            lat: '',
+            lon: '',
+            info: ''
         },
         insurance: {
-            period: 24
+            interval: 24
         }
     })
 
     const updateData = (key, value) => {
         const temp = {...data}
-        temp[form][key] = value
+
+        if (key === 'aadhar') {
+            const _value = value.replace(/ /g, '')
+            if(isNaN(_value)) return
+            if(_value.length > 16) return
+            if (_value.length > 0
+                && _value.length % 4 === 0
+                && _value.length !== 16
+                && value.length > temp[form][key].length )
+                temp[form][key] = value + ' '
+            else if(_value.length % 4 === 0 && _value.length < 16)
+                temp[form][key] = value.slice(0, value.length - 1)
+            else temp[form][key] = value
+        } else if(form === 'location') {
+            if(isNaN(value)) return
+            temp[form][key] = value.toFixed(4) || value
+        }
+        else temp[form][key] = value
+
+        console.log(form, key, value)
         setData(temp)
     }
 
@@ -41,7 +60,7 @@ const InitialForm = props => {
 			months = value % 12
 
 			str = years !== 0 ? years === 1 ? ' 1 year '
-			: years > 100 ? '  Are you fucking kidding me? x_x' : ` ${years} years `
+			: years > 100 ? '  Are you kidding me? x_x' : ` ${years} years `
 			: ''
 
 			if(years < 100)
@@ -49,7 +68,7 @@ const InitialForm = props => {
 			: months > 1 ? ` ${parseFloat(months).toFixed(0)} mons.` : `~ ${parseFloat(months*30).toFixed(0)} days`
 			: ''
 
-			str = str.length === 0 ? '  Are you fucking kidding me? x_x' : str
+			str = str.length === 0 ? '  Are you kidding me? x_x' : str
 		}
 
 		return str
@@ -57,18 +76,20 @@ const InitialForm = props => {
 
     const updateUserDetails = () => {
 
-        const userData = {
-            dl: data.user.dl,
-            insurance: {
-                period: data.insurance.period,
-                vehicle: data.vehicle
-            }
+        const insurance = {
+            aadhar: data.user.aadhar.replace(/ /g, ''),
+            location: {
+                lat: data.location.lat,
+                lon: data.location.lon
+            },
+            interval: data.insurance.interval
         }
-        axios.post('http://localhost:5000/user/details', {userData}, { headers: { Authorization: user.token } })
+
+        axios.post('http://localhost:5000/user/details', {insurance}, { headers: { Authorization: user.token } })
             .then(res => {
                 if(res.data.user) updateUser(res.data.user)
             })
-            .catch(err => console.log(err))
+            .catch(err => console.log(err.response.data))
 	}
 
 	const personalDetails = () => {
@@ -77,30 +98,38 @@ const InitialForm = props => {
                 <label>Name</label>
                 <input type="text" defaultValue={user.name}
                     onChange={event => updateData('name', event.target.value) } />
-                <label>Driving License Number</label>
+                <label>Aadhar Number</label>
                 <input type="text"
-                    onChange={event => updateData('dl', event.target.value) } />
+                    value={data.user.aadhar}
+                    onChange={event => updateData('aadhar', event.target.value) } />
             </div>
         )
     }
 
-    const vehicleDetails = () => {
+    const getLocation = () => {
+        if(navigator.geolocation) navigator.geolocation.getCurrentPosition(pos => {
+            updateData('lat', pos.coords.latitude)
+            updateData('lon', pos.coords.longitude)
+
+            console.log(data)
+        })
+        else updateData('info', ' Geolocation API is not available.')
+    }
+
+    const locationDetails = () => {
         return (
-            <div className="vehicle-details">
-                <label>Vehicle Name</label>
+            <div className="location-details">
+                <div className="locate" onClick={() => getLocation()} >
+                    <span>Locate</span>
+                </div>
+                <label>Latitude</label>
                 <input type="text"
-                    onChange={event => updateData('name', event.target.value) } />
-                <label>Vehicle Number</label>
+                    value={data.location.lat}
+                    onChange={event => updateData('lat', event.target.value) } />
+                <label>Longitude</label>
                 <input type="text"
-                    onChange={event => updateData('number', event.target.value) } />
-                <label>Vehicle Type</label>
-                <select name="vehicle-type"
-                    onChange={event => updateData('wheels', event.target.value) } >
-                    <option value="2">2 Wheeler</option>
-                    <option value="3">3 Wheeler</option>
-                    <option value="4">4 Wheeler</option>
-                    <option value="6">6 Wheeler</option>
-                </select>
+                    value={data.location.lon}
+                    onChange={event => updateData('lon', event.target.value) } />
             </div>
         )
     }
@@ -108,10 +137,10 @@ const InitialForm = props => {
     const insuranceDetails = () => {
         return (
             <div className="insurance-details">
-                <label>Insurance Period [months]</label>
-                <input type="number" defaultValue={data.insurance.period}
+                <label>Insurance Interval [months]</label>
+                <input type="number" defaultValue={data.insurance.interval}
                     onChange={event => {
-                        updateData('period', event.target.value ? parseInt(event.target.value) : 0)
+                        updateData('interval', event.target.value ? parseInt(event.target.value) : 0)
                         setReadable(getReadable(event.target.value))
                     }} />
                 <span className="readable">{readable}</span>
@@ -119,12 +148,12 @@ const InitialForm = props => {
         )
     }
 
-    const renderSubmitButton = () => <div className={`submit${data.insurance.period == 0 ? ' disabled' : ''}`}
-                                            disabled={data.insurance.period == 0}
+    const renderSubmitButton = () => <div className={`submit${data.insurance.interval === 0 || data.insurance.interval >= 1212 ? ' disabled' : ''}`}
+                                            disabled={data.insurance.interval === 0 || data.insurance.interval >= 1212}
                                             onClick={() => updateUserDetails()} >SUBMIT</div>
     const renderNextButton = () => <div className="next"
-                                            onClick={() => setForm(form === 'user' ? 'vehicle'
-                                                                    : form === 'vehicle' ? 'insurance'
+                                            onClick={() => setForm(form === 'user' ? 'location'
+                                                                    : form === 'location' ? 'insurance'
                                                                     : '' )} >NEXT</div>
 
     return (
@@ -134,15 +163,15 @@ const InitialForm = props => {
                 <InfoIcon />
                 {
                     form === 'user' ? 'Personal details.'
-                    : form === 'vehicle' ? 'Your vehicle details.'
-                    : form === 'insurance' ? 'How long you want them insured?'
+                    : form === 'location' ? "What's your location?" + data.location.info
+                    : form === 'insurance' ? "What's the PayPremium interval?"
                     : ''
                 }
             </div>
 
             {
                 form === 'user' ? personalDetails()
-                : form === 'vehicle' ? vehicleDetails()
+                : form === 'location' ? locationDetails()
                 : form === 'insurance' ? insuranceDetails()
                 : ''
             }

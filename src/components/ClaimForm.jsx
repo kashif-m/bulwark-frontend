@@ -8,8 +8,7 @@ import CloseIcon from '../assets/images/close.svg'
 const ClaimForm = props => {
 
 	const {user, updateClaimFormView} = props
-	user.insurance = {}
-	user.insurance.vehicles = [{name: 'RE 500cc'}, {name: 'RE 150cc'}]
+	const vehicle = user.insurance.vehicle
 
   	return (
 	
@@ -17,9 +16,9 @@ const ClaimForm = props => {
 			<div className="heading">Insurance Claim</div>
 			<div className="info">
 				<InfoIcon />
-				Please fill out the necessary fields.
+				<span>Please fill out the necessary fields.</span>
 			</div>
-			<CloseIcon onClick={() => updateClaimFormView(false)} />
+			<CloseIcon className='close' onClick={() => updateClaimFormView(false)} />
 			<div className="claim--type">
 				<div className="heading">Insurance Type</div>
 				<select name="claim-type" id="claim-type">
@@ -29,11 +28,7 @@ const ClaimForm = props => {
 			<div className="claim--vehicle">
 				<div className="heading">Select your vehicle</div>
 	  			<select name="claim--vehicle" id="claim--vehicle">
-					{
-						user.insurance.vehicles.map(vehicle =>
-							<option value={vehicle.name}> {vehicle.name} </option>
-						)
-					}
+					<option value={vehicle.number}> {vehicle.value} </option>
 				</select>
 			</div>
 			<div className="claim--cause">

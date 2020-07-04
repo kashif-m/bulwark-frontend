@@ -124,20 +124,23 @@ const Home = props => {
 
 	return (
 		<div className='home' >
-			<div className="header">Bulwark Insurance</div>
+			<div className="header">BULWARK</div>
 			<div className="body">
-				Automobile insurance with blockchain technologies.
-				We use a blockchain system to strengthen our policies and your insurance claims. <br/> <br/>
-				Contact us and get started today!
+				Crop insurance with blockchain technologies.
+				We use a blockchain system to strengthen our policies and your insurance claims.
+				{/* <img src={require('../assets/images/crops.png')} alt=""/> */}
 			</div>
 			<div className="side">
+				
 				{
 					!authScreen ?
 					<React.Fragment>
-						<span>Already Registered?</span>
-						<div className="login"
-							onClick={() => setAuthScreen('login')} >
-							Sign in
+						<div>
+							Already Registered?
+							<span className="login"
+								onClick={() => setAuthScreen('login')} >
+								Sign in
+							</span>
 						</div>
 						<div className="sign-up"
 							onClick={() => setAuthScreen('signup')} >

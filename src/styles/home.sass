@@ -1,42 +1,47 @@
 .home
 	display: grid
 	grid-template-rows: max-content auto
-	grid-template-columns: 60vw 40vw
+	grid-template-columns: 75vw 25vw
 	color: $black_rich
 	height: 100%
 	.header
-		padding: 20 100 0 0
-		justify-self: flex-end
+		width: 100%
+		background-color: $blue_celtic
+		color: white
+		padding: 50 0
+		text-align: center
 		font:
-			family: MontserratBold
+			family: HammersmithOne
 			size: 40
 	.body
-		padding: 50 40 0 0
+		padding: 80 40 0 0
 		font:
-			family: MontserratRegular
-			size: 20
+			family: Varela
+			size: 24
 		justify-self: flex-end
-		width: 500
+		width: 700
 	.side
 		grid-column: 2 / 3
 		grid-row: 1 / -1
 		height: 100%
 		width: 100%
-		padding: 100 0 0 40
+		padding-top: 100
 		font-size: 15
 		border-left: 1px solid $gray_platinum
-		font-family: MontserratRegular
+		display: flex
+		flex-flow: column
+		align-items: center
 		span
-			font-size: 20
+			font-family: Varela
+			font-size: 18
 		.login
 			margin-top: 5
 			cursor: pointer
-			background-color: $green_spring
-			color: white
 			width: max-content
-			padding: 2 10 3 10
-			font-size: 11
+			font-size: 20
 			border-radius: 2px
+			font-weight: 900
+			padding-left: 10
 
 		.sign-up
 			cursor: pointer
@@ -74,7 +79,7 @@
 				min-width: 25ch
 				padding: 10 20
 				border-radius: 2px
-				background-color: $gray_platinum
+				background-color: #F3F3F3
 				font:
 					family: Varela
 					size: 14
@@ -102,7 +107,7 @@
 			.submit
 				grid-row: -2 / -1
 				cursor: pointer
-				background-color: $green_spring
+				background-color: black
 				margin-top: 15
 				border-radius: 2px
 				text-align: center

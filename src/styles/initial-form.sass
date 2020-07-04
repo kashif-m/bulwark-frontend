@@ -19,7 +19,7 @@
         cursor: pointer
         margin-top: 50
         align-self: flex-start
-        background-color: $green_spring
+        background-color: $blue_celtic
         color: white
         padding: 10 40
         border-radius: 2px
@@ -29,16 +29,17 @@
 
         transition: .3s all
         &:hover
-            background-color: #1BAA4B
+            background-color: #2D7DD2
             transition: .15s all
 
-    .personal-details, .vehicle-details
+    .personal-details, .location-details
         display: grid
         grid-template-columns: max-content max-content
         grid-auto-rows: max-content
         grid-gap: 30px
         margin: 40 0 0 30
         label
+            align-self: center
             font:
                 family: MontserratRegular
                 size: 18
@@ -58,6 +59,24 @@
             &:hover, &:focus
                 background-color: #F8F8FF
                 transition: .15s all
+
+    .location-details
+        .locate
+            width: max-content
+            grid-column: 1 / -1
+            text-align: center
+            cursor: pointer
+            border-radius: 100px
+            padding: 7 50
+            background-color: black
+            span
+                font:
+                    family: MontserratBold
+                    size: 20
+                color: white
+            &:hover
+                background-color: #1A1A1A
+
 
     .insurance-details
         margin: 40 0 0 30
@@ -82,7 +101,7 @@
         align-self: flex-start
         cursor: pointer
         width: max-content
-        background-color: $green_spring
+        background-color: $blue_celtic
         margin-top: 50
         color: white
         padding: 10 40
