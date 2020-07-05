@@ -206,7 +206,7 @@ class Dash extends Component {
 				<div className="options">
 					<div className="insurance">
 						<div className="heading">Current Insurance Details</div>
-						<div className="details">
+						<div className={`details${insurance.insured ? '' : ' expired'}`}>
 							{
 								insurance.insured ?
 								<React.Fragment>
@@ -220,7 +220,10 @@ class Dash extends Component {
 									</div>
 								</React.Fragment>
 								: <React.Fragment>
-									<div className="status">Expired</div>
+									<div className="status">
+										<span>{insurance.surveyNo}</span>
+										has expired.
+									</div>
 								</React.Fragment>
 							}
 						</div>

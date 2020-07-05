@@ -1,9 +1,10 @@
 .dash
 	@import ./initial-form
-	height: 100%
+	max-height: 100vh
+	overflow: hidden
 	display: grid
 	grid-template-columns: min-content auto
-	grid-template-rows: max-content auto
+	grid-template-rows: max-content 1fr
 	font-family: ProductSansRegular
 	.header
 		grid-column: 1 / -1
@@ -57,6 +58,7 @@
 					background-color: $gray_platinum
 
 	.claims, .account, .overview, .wallet, .blockchain, .pay-premium, .add-wallet
+		overflow: auto
 		display: flex
 		flex-flow: column
 		padding: 20 0 0 30
@@ -94,6 +96,8 @@
 					border-radius: 3px
 					background-color: $green_spring
 					color: white
+					&.expired
+						background-color: $red
 					.status
 						margin-bottom: 20
 						font-size: 19
