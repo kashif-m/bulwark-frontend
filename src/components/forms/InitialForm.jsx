@@ -18,7 +18,8 @@ const InitialForm = props => {
         location: {
             lat: '',
             lon: '',
-            info: ''
+            info: '',
+            surveyNo: ''
         },
         insurance: {
             interval: 24
@@ -42,7 +43,7 @@ const InitialForm = props => {
             else temp[form][key] = value
         } else if(form === 'location') {
             if(isNaN(value)) return
-            temp[form][key] = value.toFixed(4) || value
+            temp[form][key] = value
         }
         else temp[form][key] = value
 
@@ -76,13 +77,15 @@ const InitialForm = props => {
 
     const updateUserDetails = () => {
 
+        const {lat, lon, surveyNo} = data.location
         const insurance = {
             aadhar: data.user.aadhar.replace(/ /g, ''),
             location: {
-                lat: data.location.lat,
-                lon: data.location.lon
+                lat,
+                lon
             },
-            interval: data.insurance.interval
+            interval: data.insurance.interval,
+            surveyNo
         }
 
         axios.post('http://localhost:5000/user/details', {insurance}, { headers: { Authorization: user.token } })
@@ -130,6 +133,11 @@ const InitialForm = props => {
                 <input type="text"
                     value={data.location.lon}
                     onChange={event => updateData('lon', event.target.value) } />
+
+                <label>Survey Number</label>
+                <input type="text"
+                    value={data.location.surveyNo}
+                    onChange={event => updateData('surveyNo', event.target.value)} />
             </div>
         )
     }

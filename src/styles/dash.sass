@@ -74,6 +74,62 @@
 				color: #4A4A4A
 				font-size: 12
 
+	.overview
+		.options
+			padding-top: 20
+			.insurance
+				margin-bottom: 40
+			.insurance, .weather
+				& > .heading
+					max-width: max-content
+					border-bottom: 1px solid $gray_platinum
+					margin-bottom: 20
+					font:
+						family: ProductSansBold
+						size: 20
+				.details
+					cursor: pointer
+					max-width: max-content
+					padding: 20
+					border-radius: 3px
+					background-color: $green_spring
+					color: white
+					.status
+						margin-bottom: 20
+						font-size: 19
+						span
+							font-weight: 900
+							margin-right: 10
+					.next-premium
+						label
+							display: block
+							font:
+								size: 19
+								weight: 900
+			.weather
+				.details
+					cursor: pointer
+					max-width: max-content
+					padding: 20 40 20 40
+					border-radius: 3px
+					background-color: #1DA4ED
+					.condition
+						margin-top: 20
+						font-size: 18
+					& > div
+						margin: 10 0
+						display: flex
+						align-items: center
+						font:
+							weight: 900
+							size: 22
+						span
+							margin-left: 20
+					.heading
+						font:
+							size: 20
+							weight: 900
+
 	.claims
 		@import ./claim-form
 		.options

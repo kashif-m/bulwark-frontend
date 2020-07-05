@@ -11,6 +11,9 @@ import ClaimIcon from '../assets/images/claim.svg'
 import DashboardIcon from '../assets/images/dashboard.svg'
 import InfoIcon from '../assets/images/info.svg'
 import WalletIcon from '../assets/images/wallet.svg'
+import TempIcon from '../assets/images/temperature.svg'
+import RainIcon from '../assets/images/rain.svg'
+import LocationIcon from '../assets/images/location.svg'
 
 // components
 import ClaimForm from './ClaimForm.jsx'
@@ -179,12 +182,67 @@ class Dash extends Component {
 
 	renderOverview = () => {
 		const [user] = this.props.user
+		const {insurance} = user
+		const weather = {
+			temp: '25',
+			rain: '73%',
+			info: 'Mostly Cloudy'
+		}
+
+		const nextPayment = (date, interval) => {
+			return "2nd Feb, 2023"
+		}
+
+		const getLocation = ({lat, lon}) => {
+			return "Bangalore"
+		}
 		return (
 			<div className="overview">
 				<div className="heading">Overview</div>
 				<div className="info">
 					<InfoIcon />
 					<span>An overview of your account.</span>
+				</div>
+				<div className="options">
+					<div className="insurance">
+						<div className="heading">Current Insurance Details</div>
+						<div className="details">
+							{
+								insurance.insured ?
+								<React.Fragment>
+									<div className="status">
+										<span>{insurance.surveyNo}</span>
+										is insured.
+									</div>
+									<div className="next-premium">
+										<label>Next Payment</label>
+										<span>{nextPayment(insurance.date, insurance.interval)}</span>
+									</div>
+								</React.Fragment>
+								: <React.Fragment>
+									<div className="status">Expired</div>
+								</React.Fragment>
+							}
+						</div>
+					</div>
+					<div className="weather">
+						<div className="heading">Weather in your area</div>
+						<div className='details'>
+							<div className="location">
+								<LocationIcon />
+								<span className="val">{getLocation(insurance.location)}</span>
+							</div>
+							<div className="temp">
+								<TempIcon />
+								<span>{weather.temp}</span>
+							</div>
+							<div className="rain">
+								<RainIcon />
+								<span>{weather.rain}</span>
+							</div>
+							<div className="condition">{weather.info}</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		)
