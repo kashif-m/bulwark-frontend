@@ -74,17 +74,30 @@
 			grid-template-rows: max-content 30px repeat(5, max-content)
 		.signup-form
 			grid-template-rows: max-content 30px repeat(7, max-content)
-		.login-form, .signup-form
+		.reset-form
+			grid-template-rows: max-content 30px repeat(3, max-content)
+			.heading
+				& > div
+					display: flex
+					flex-flow: column
+					.info
+						font:
+							size: 12
+							weight: 100
+						& > svg
+							position: relative
+							top: 2
+							margin-right: 5
+		.login-form, .signup-form, .reset-form
 			background-color: white
 			border-radius: 2px
 			padding: 10vh 80
 			display: grid
 
 			.heading
-				// width: 285
 				display: flex
 				margin-bottom: 10
-				svg
+				& > svg
 					cursor: pointer
 					position: relative
 					left: 65
@@ -104,6 +117,20 @@
 					family: ProductSansRegular
 					size: 15
 					weight: 600
+			.pass
+				display: flex
+				cursor: pointer
+				align-items: center
+				justify-content: space-between
+				span
+					position: relative
+					bottom: 2
+					margin-right: 10
+					font:
+						weight: 100
+						size: 10
+					&:hover
+						font-weight: 900
 			input
 				justify-self: center
 				min-width: 25ch

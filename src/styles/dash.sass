@@ -4,19 +4,27 @@
 	display: grid
 	grid-template-columns: min-content auto
 	grid-template-rows: max-content auto
-	font-family: MontserratRegular
-	.nav
+	font-family: ProductSansRegular
+	.header
 		grid-column: 1 / -1
 		padding: 20 8vw
-		display: flex
-		justify-content: space-between
+		display: grid
+		grid-template-columns: max-content auto max-content
 		align-items: center
 		min-height: 8vh
 		border-bottom: 1px solid $gray_platinum
+		svg
+			cursor: pointer
 		.greeting
+			margin-left: 100
+			display: flex
+			flex-flow: column
 			font:
-				family: MontserratBold
-				size: 40
+				family: ProductSansBold
+				size: 25
+				weight: 900
+			.user
+				font-size: 35
 		.logout
 			cursor: pointer
 			font-size: 12
@@ -48,14 +56,14 @@
 				&.selected
 					background-color: $gray_platinum
 
-	.claims, .account, .overview, .wallet, .blockchain, .pay-premium
+	.claims, .account, .overview, .wallet, .blockchain, .pay-premium, .add-wallet
 		display: flex
 		flex-flow: column
 		padding: 20 0 0 30
 		& > .heading
 			font:
 				size: 30
-				family: MontserratBold
+				family: ProductSansBold
 		& > .info
 			display: flex
 			align-items: center
@@ -104,7 +112,7 @@
 			.option
 				.heading
 					font:
-						family: MontserratBold
+						family: ProductSansBold
 					padding: 20 20 5 0
 					width: max-content
 					font-size: 20
@@ -143,7 +151,7 @@
 				.val
 					margin: 10 0 0 5
 					font:
-						family: MontserratBold
+						family: ProductSansBold
 						size: 30
 
 				.transaction-history
@@ -180,7 +188,7 @@
 					justify-content: center
 					align-items: center
 					font:
-						family: MontserratBold
+						family: ProductSansBold
 						size: 30
 			& > .insurance-info
 				display: grid
@@ -189,6 +197,7 @@
 				color: #5A5A5A
 				margin: 0 0 30 20
 				.edit
+					width: min-content
 					font-size: 13
 					background-color: #5A5A5A
 					border-radius: 3px
@@ -201,20 +210,26 @@
 					&:hover
 						background-color: #3A3A3A
 						transition: .15s all
-				.heading, .vehicle-details
+				& > .heading
 					align-self: center
 					font:
-						family: MontserratRegular
+						family: ProductSansRegular
 						size: 14
-				.vehicle-details
-					margin-left: 20
+				
+				.item
+					padding-top: 20
+					.heading
+						color: black
+						font:
+							family: ProductSansBold
+							size: 24
 
 			.submit
 				cursor: pointer
 				font:
-					family: MontserratBold
+					family: ProductSansBold
 					size: 18
-				background-color: $green_spring
+				background-color: $blue_celtic
 				padding: 10 40
 				color: white
 				border-radius: 2px
@@ -223,3 +238,41 @@
 				&:hover
 					transition: .15s all
 		            background-color: black
+
+	.add-wallet
+		.options
+			padding-left: 40
+			input
+				width: 40ch
+				display: block
+				cursor: pointer
+				border: 1px solid $gray_platinum
+				background-color: white
+				padding: 8 15
+				border-radius: 2px
+				margin-top: 30
+				font:
+					family: MavenProMedium
+					size: 15
+				transition: .3s all
+
+				&:hover, &:focus
+					background-color: #F8F8FF
+					transition: .15s all
+
+			.submit
+				margin-right: 20
+			.submit, .dev-keys
+				cursor: pointer
+				background-color: $blue_celtic
+				margin-top: 50
+				color: white
+				padding: 10 40
+				border: 0
+				border-radius: 2px
+				font:
+					family: ProductSansBold
+					size: 18
+				&.disabled
+					cursor: not-allowed
+					background-color: $gray_platinum

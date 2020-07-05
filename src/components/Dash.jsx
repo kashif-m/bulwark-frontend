@@ -6,6 +6,7 @@ import axios from 'axios'
 import AccountIcon from '../assets/images/account.svg'
 import AddIcon from '../assets/images/add.svg'
 import BlockchainIcon from '../assets/images/blockchain.svg'
+import BulwarkLogo from '../assets/images/bulwarklogo.svg'
 import ClaimIcon from '../assets/images/claim.svg'
 import DashboardIcon from '../assets/images/dashboard.svg'
 import InfoIcon from '../assets/images/info.svg'
@@ -22,7 +23,8 @@ class Dash extends Component {
 		super(props)
 		this.state = {
 			selectedOption: 'overview',
-			viewClaimForm: false
+			viewClaimForm: false,
+			wallet: ''
 		}
 	}
 
@@ -35,12 +37,7 @@ class Dash extends Component {
 
 	payPremium = () => {
 		const [user, updateUser] = this.props.user
-		console.log(user)
-		const data = {
-			vehicleNo: user.insurance.vehicle.number,
-			insurance_period: user.insurance.period
-		}
-		axios.post('http://localhost:5000/insurance/new', {data}, {headers: {Authorization: user.token}})
+		axios.get('http://localhost:5000/insurance/new', {headers: {Authorization: user.token}})
 			.then(res => {
 				if(!res || !res.data) console.log({err: 'could not receive from backend'})
 				else res.data.user ? updateUser(res.data.user) : null
@@ -48,17 +45,55 @@ class Dash extends Component {
 			.catch(err => console.log(err.response.data))
 	}
 
+	submitWallet = (dev = false) => {
+		const [user, updateUser] = this.props.user
+		if(dev) {
+			axios.get('http://localhost:5000/user/dev:keys', {headers: {Authorization: user.token}})
+				.then(res => updateUser(res.data.user))
+				.catch(err => console.log(err))
+		}
+	}
+
+	renderAddWallet = () => {
+		const wallet = this.state.wallet
+		const isSubmitDisabled = wallet.length !== 42
+		return (
+			<div className="add-wallet">
+				<div className="heading">Add Wallet</div>
+				<div className="info">
+					<InfoIcon />
+					<span>Enter your wallet address.</span>
+				</div>
+				<div className="options">
+					<input type="text"
+						onChange={e => {
+							let val = e.target.value
+							if(val.length === 1) val = '0x' + val
+							else if(val.length === 2) val = ''
+							else if(val.length > 42) return
+
+							this.setState({wallet: val})
+						}}
+						placeholder="0xlegitwalletaddress"
+						value={wallet} />
+					<button className={`submit${isSubmitDisabled ? ' disabled': ''}`} onClick={() => this.submitWallet()}
+						disabled={isSubmitDisabled} >SUBMIT</button>
+					<span className="dev-keys" onClick={() => this.submitWallet(true)} >Use Dev Wallet</span>
+				</div>
+			</div>
+		)
+	}
+
 	renderPayPremiumPage = () => {
 		const [user, updateUser] = this.props.user
 		const insurance = user.insurance
-		const vehicle = insurance.vehicle
 
 		return (
 			<div className="pay-premium">
-				<div className="heading">Pay Premium</div>
+				<div className="heading">Pay First Premium</div>
 				<div className="info">
 					<InfoIcon />
-					<span>This amount will be deducted from your bulwark wallet.</span>
+					<span>This amount will be deducted from your{user.keys.dev ? ' bulwark' : ''} wallet.</span>
 				</div>
 				<div className="options">
 					<div className="total">
@@ -66,16 +101,20 @@ class Dash extends Component {
 						<span className="value">{user.payPremium} ETH</span>
 					</div>
 					<div className="insurance-info">
-						<div className='heading'>For the following vehicle and insurance period</div>
+						<div className='heading'>For the following location and insurance period</div>
 						<div className="edit" onClick={() => {
 							const temp = {...user}
 							temp.configured = false
 							updateUser(temp)
 						}} >edit</div>
-						<div className="vehicle-details">
-							<div>Vehicle - {vehicle.name}</div>
-							<div>Type - {vehicle.wheels} Wheeler</div>
-							<div>Insurance Period - {insurance.period} months</div>
+						<div className='item' >
+							<div className="heading">Location</div>
+							<div>Latitude: {insurance.location.lat}</div>
+							<div>Longitude: {insurance.location.lon}</div>
+						</div>
+						<div className='item' >
+							<div className="heading">Insurance Interval</div>
+							<div>{insurance.interval} months</div>
 						</div>
 					</div>
 					<div className="submit" onClick={() => this.payPremium()}>PROCEED</div>
@@ -208,9 +247,11 @@ class Dash extends Component {
 
 		return (
 			<div className='dash' >
-				<div className="nav">
+				<div className="header">
+					<BulwarkLogo onClick={() => window.location.reload()} />
 					<div className="greeting">
-						Greetings, {user.name}
+						Hey,
+						<span className="user">{user.name}</span>
 					</div>
 					<div className="logout"
 						onClick={() => updateUser(false)} >logout</div>
@@ -255,6 +296,7 @@ class Dash extends Component {
 				</div>
 				{
 					!user.configured ? <InitialForm user={[user, updateUser]} />
+					: user.configured && !user.insurance.insured && !user.keys.public ? this.renderAddWallet()
 					: user.configured && !user.insurance.insured ? this.renderPayPremiumPage()
 					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'overview' ? this.renderOverview()

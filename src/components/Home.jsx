@@ -6,27 +6,29 @@ import axios from 'axios'
 import BulwarkLogo from '../assets/images/bulwarklogo.svg'
 import CloseIcon from '../assets/images/close.svg'
 import CrossIcon from '../assets/images/cross.svg'
+import InfoIcon from '../assets/images/info.svg'
 
 const Home = props => {
 
 	const [authScreen, setAuthScreen] = useState(false)
 	const [err, setErr] = useState(false)
+	const [data, setData] = useState({
+		email: '',
+		password: '',
+		name: ''
+	})
 
 	useEffect(() => {
-		if(!authScreen) setErr(false)
+		setErr(false)
 	}, [authScreen])
 
+	const updateData = (key, val) => {
+		const temp = {...data}
+		temp[key] = val
+		setData(temp)
+	}
+
 	const createUser = () => {
-
-		const email = document.getElementById('email').value
-		const password = document.getElementById('password').value
-		const name = document.getElementById('name').value
-
-		const data = {
-			email,
-			password,
-			name
-		}
 
 		axios.post('http://localhost:5000/user/new', data)
 			.then(res => {
@@ -46,15 +48,14 @@ const Home = props => {
 
 	const verifyUser = () => {
 		
-		const email = document.getElementById('email').value
-		const password = document.getElementById('password').value
+		const {email, password} = data
 
-		const data = {
+		const _data = {
 			email,
 			password
 		}
 
-		axios.post('http://localhost:5000/user/login', data)
+		axios.post('http://localhost:5000/user/login', _data)
 			.then(res => {
 				if(res.data.user) props.updateUser(res.data.user)
 				console.log('updated')
@@ -67,8 +68,21 @@ const Home = props => {
 			})
 	}
 
+	const resetUser = () => {
+		const {email} = data
+
+		axios.get(`http://localhost:5000/user/reset&email=${email}`)
+			.then(res => {console.log(res.data)})
+			.catch(err => {
+				if(err.response) {
+					if(err.response.data.err) setErr(err.response.data.err)
+					else setErr("Something's wrong. Check console.") && console.log(err)
+				}
+				else setErr('Could no connect to bulwark-backend')
+			})
+	}
+
 	const renderForm = () => {
-		console.log('asfhvashj')
 		return (
 			authScreen === 'login' ?
 			<div className="login-form">
@@ -86,9 +100,14 @@ const Home = props => {
 					: <div></div>
 				}
 				<label>E-MAIL</label>
-				<input id='email' type="email" placeholder='Registered e-mail' />
-				<label>PASSWORD</label>
-				<input id='password' type="password" placeholder='Your password' />
+				<input id='email' type="email" placeholder='Registered e-mail'
+					onChange={e => updateData('email', e.target.value)} />
+				<label className='pass'>
+					PASSWORD
+					<span onClick={() => setAuthScreen('reset')} >Forgot Password</span>
+				</label>
+				<input id='password' type="password" placeholder='Your password'
+					onChange={e => updateData('password', e.target.value)} />
 
 				<div className="submit"
 					onClick={() => verifyUser()} >LOGIN</div>
@@ -109,14 +128,45 @@ const Home = props => {
 					: <div></div>
 				}
 				<label>E-MAIL</label>
-				<input type="text" id="email" placeholder='Your e-mail' />
+				<input type="text" id="email" placeholder='Your e-mail'
+					onChange={e => updateData('email', e.target.value)} />
 				<label>PASSWORD</label>
-				<input type="password" id="password" placeholder='Choose a strong password' />
+				<input type="password" id="password" placeholder='Choose a strong password'
+					onChange={e => updateData('password', e.target.value)} />
 				<label>NAME</label>
-				<input type="text" id="name" placeholder='Full name as per records' />
+				<input type="text" id="name" placeholder='Full name as per records'
+					onChange={e => updateData('name', e.target.value)} />
 
 				<div className="submit"
 					onClick={() => createUser()} >REGISTER</div>
+			</div>
+			: authScreen === 'reset' ?
+			<div className="reset-form">
+				<div className="heading">
+					<div>
+						<div>Forgot your password?</div>
+						<div className="info">
+							<InfoIcon />
+							A link to reset your password will be sent to your e-mail
+						</div>
+					</div>
+					<CloseIcon onClick={() => setAuthScreen(false)} />
+				</div>
+				{
+					err ?
+					<div className="err"
+						onClick={() => setErr(false)} >
+						{err}
+						<CrossIcon />
+					</div>
+					: <div></div>
+				}
+				<label>E-MAIL</label>
+				<input type="text" id='email' placeholder='Your registered e-mail'
+					onChange={e => updateData('email', e.target.value)} />
+
+				<div className="submit"
+					onClick={() => resetUser()} >SUBMIT</div>
 			</div>
 			: null
 		)
@@ -138,7 +188,7 @@ const Home = props => {
 				<div className="info">
 					<strong> Crop insurance with blockchain technologies. </strong>
 					<div>
-						We use a blockchain systems to strengthen our policies and your insurance claims.
+						We use blockchain systems to strengthen our policies and your insurance claims.
 					</div>
 				</div>
 				<div className="sign-in">
