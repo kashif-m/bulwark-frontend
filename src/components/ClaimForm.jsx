@@ -9,6 +9,11 @@ const ClaimForm = props => {
 
 	const {user, updateClaimFormView} = props
 	const {insurance} = user
+
+	const canClaim = () => {
+
+	}
+
   	return (
 	
 		<div className='claim-form'>
@@ -27,13 +32,14 @@ const ClaimForm = props => {
 			<div className="claim--cause">
 				<div className="heading">Reason for Insurance claim?</div>
 				<select name="claim--cause" id="claim--cause">
-					<option value="rain">Rain Damage</option>
+					<option value="">Select Cause</option>
+					<option value="rain">Rain Flooding</option>
 					<option value="drought">Drought Damage</option>
-					<option value="pest">Pest Attack</option>
 				</select>
 			</div>
 
-			<div className="submit">SUBMIT</div>
+			<div className="submit"
+				onClick={() => canClaim()} >SUBMIT</div>
 		</div>
   	)
 }

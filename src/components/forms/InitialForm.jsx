@@ -9,7 +9,7 @@ const InitialForm = props => {
 
     const [user, updateUser] = props.user
     const [form, setForm] = useState('user')
-    const [readable, setReadable] = useState('2 years')
+    const [readable, setReadable] = useState({interval: '2 years', coverage: 'INR'})
     const [data, setData] = useState({
         user: {
             name: '',
@@ -22,7 +22,8 @@ const InitialForm = props => {
             surveyNo: ''
         },
         insurance: {
-            interval: 24
+            interval: 24,
+            coverage: '10000'
         }
     })
 
@@ -44,6 +45,11 @@ const InitialForm = props => {
         } else if(form === 'location') {
             if(isNaN(value)) return
             temp[form][key] = value
+        } else if(key === 'interval') {
+            if(value.toString().length > 4) return
+            else if(value.to)
+            console.log(value)
+            temp[form][key] = value
         }
         else temp[form][key] = value
 
@@ -51,26 +57,30 @@ const InitialForm = props => {
         setData(temp)
     }
 
-	const getReadable = value => {
+	const getReadable = (key, value) => {
+        let str
+        if(key === 'coverage') {
+            str = 'INR'
+        } else if(key === 'interval') {
 
-		let years, months, str
+            let years, months
+            if(value.length === 0) str = ''
+            else {
+                years = parseInt(value / 12)
+                months = value % 12
 
-		if(value.length === 0) str = '  Put some numbers in.'
-		else {
-			years = parseInt(value / 12)
-			months = value % 12
+                str = years !== 0 ? years === 1 ? ' 1 year '
+                : years > 100 ? '  Are you kidding me? x_x' : ` ${years} years `
+                : ''
 
-			str = years !== 0 ? years === 1 ? ' 1 year '
-			: years > 100 ? '  Are you kidding me? x_x' : ` ${years} years `
-			: ''
+                if(years < 100)
+                str += months !== 0 ? months === 1 ? ' 1 mon.'
+                : months > 1 ? ` ${parseFloat(months).toFixed(0)} mons.` : `~ ${parseFloat(months*30).toFixed(0)} days`
+                : ''
 
-			if(years < 100)
-			str += months !== 0 ? months === 1 ? ' 1 mon.'
-			: months > 1 ? ` ${parseFloat(months).toFixed(0)} mons.` : `~ ${parseFloat(months*30).toFixed(0)} days`
-			: ''
-
-			str = str.length === 0 ? '  Are you kidding me? x_x' : str
-		}
+                str = str.length === 0 ? '  Are you kidding me? x_x' : str
+            }
+        }
 
 		return str
 	}
@@ -78,14 +88,16 @@ const InitialForm = props => {
     const updateUserDetails = () => {
 
         const {lat, lon, surveyNo} = data.location
+        const {coverage, interval} = data.insurance
         const insurance = {
             aadhar: data.user.aadhar.replace(/ /g, ''),
             location: {
                 lat,
                 lon
             },
-            interval: data.insurance.interval,
-            surveyNo
+            interval,
+            surveyNo,
+            coverage
         }
 
         axios.post('http://localhost:5000/user/details', {insurance}, { headers: { Authorization: user.token } })
@@ -145,13 +157,31 @@ const InitialForm = props => {
     const insuranceDetails = () => {
         return (
             <div className="insurance-details">
-                <label>Insurance Interval [months]</label>
-                <input type="number" defaultValue={data.insurance.interval}
-                    onChange={event => {
-                        updateData('interval', event.target.value ? parseInt(event.target.value) : 0)
-                        setReadable(getReadable(event.target.value))
-                    }} />
-                <span className="readable">{readable}</span>
+
+                <div className="interval">
+                    <label>Insurance Interval</label>
+                    <input type="number" value={data.insurance.interval}
+                        onChange={event => {
+                            updateData('interval', event.target.value)
+                            setReadable({
+                                interval: getReadable('interval', event.target.value),
+                                coverage: readable.coverage
+                            })
+                        }} />
+                    <span className="readable">{readable.interval}</span>
+                </div>
+                <div className="coverage">
+                    <label>Coverage Amount</label>
+                    <input type="number" value={data.insurance.coverage}
+                        onChange={e => {
+                            updateData('coverage', e.target.value)
+                            setReadable({
+                                coverage: getReadable('coverage', event.target.value),
+                                interval: readable.interval
+                            })
+                        }} />
+                    <span className="readable">{readable.coverage}</span>
+                </div>
             </div>
         )
     }
@@ -172,7 +202,7 @@ const InitialForm = props => {
                 {
                     form === 'user' ? 'Personal details.'
                     : form === 'location' ? "What's your location?" + data.location.info
-                    : form === 'insurance' ? "What's the PayPremium interval?"
+                    : form === 'insurance' ? "Let's talk business."
                     : ''
                 }
             </div>

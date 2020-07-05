@@ -25,7 +25,7 @@ class Dash extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			selectedOption: 'overview',
+			selectedOption: 'claims',
 			viewClaimForm: false,
 			wallet: ''
 		}
@@ -104,7 +104,7 @@ class Dash extends Component {
 						<span className="value">{user.payPremium} ETH</span>
 					</div>
 					<div className="insurance-info">
-						<div className='heading'>For the following location and insurance period</div>
+						<div className='heading'>For the following location and coverage</div>
 						<div className="edit" onClick={() => {
 							const temp = {...user}
 							temp.configured = false
@@ -116,8 +116,8 @@ class Dash extends Component {
 							<div>Longitude: {insurance.location.lon}</div>
 						</div>
 						<div className='item' >
-							<div className="heading">Insurance Interval</div>
-							<div>{insurance.interval} months</div>
+							<div className="heading">Coverage Amount</div>
+							<div>{insurance.coverage} INR</div>
 						</div>
 					</div>
 					<div className="submit" onClick={() => this.payPremium()}>PROCEED</div>
