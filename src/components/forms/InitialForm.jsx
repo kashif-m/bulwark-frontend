@@ -52,7 +52,7 @@ const InitialForm = props => {
             temp[form][key] = value
         }
         else temp[form][key] = value
-
+        
         console.log(form, key, value)
         setData(temp)
     }

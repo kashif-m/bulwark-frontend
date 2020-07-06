@@ -315,7 +315,7 @@ class Dash extends Component {
 						<span className="user">{user.name}</span>
 					</div>
 					<div className="logout"
-						onClick={() => updateUser(false)} >logout</div>
+						onClick={() => updateUser(false)} >Log Out</div>
 				</div>
 				<div className="side-menu">
 					<div className="options">

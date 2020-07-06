@@ -1,6 +1,7 @@
 
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
+import Cursor from "react-rotating-text";
 
 // SVG
 import BulwarkLogo from '../assets/images/bulwarklogo.svg'
@@ -23,12 +24,14 @@ const Home = props => {
 	}, [authScreen])
 
 	const updateData = (key, val) => {
+
 		const temp = {...data}
 		temp[key] = val
 		setData(temp)
 	}
 
 	const createUser = () => {
+
 
 		axios.post('http://localhost:5000/user/new', data)
 			.then(res => {
@@ -49,7 +52,6 @@ const Home = props => {
 	const verifyUser = () => {
 		
 		const {email, password} = data
-
 		const _data = {
 			email,
 			password
@@ -100,7 +102,7 @@ const Home = props => {
 					: <div></div>
 				}
 				<label>E-MAIL</label>
-				<input id='email' type="email" placeholder='Registered e-mail'
+				<input id='email' type="email" placeholder='Preferred email'
 					onChange={e => updateData('email', e.target.value)} />
 				<label className='pass'>
 					PASSWORD
@@ -128,13 +130,13 @@ const Home = props => {
 					: <div></div>
 				}
 				<label>E-MAIL</label>
-				<input type="text" id="email" placeholder='Your e-mail'
+				<input type="text" id="email" placeholder='Your preferred email'
 					onChange={e => updateData('email', e.target.value)} />
 				<label>PASSWORD</label>
 				<input type="password" id="password" placeholder='Choose a strong password'
 					onChange={e => updateData('password', e.target.value)} />
 				<label>NAME</label>
-				<input type="text" id="name" placeholder='Full name as per records'
+				<input type="text" id="name" placeholder='Full name as per Aadhar'
 					onChange={e => updateData('name', e.target.value)} />
 
 				<div className="submit"
@@ -186,16 +188,18 @@ const Home = props => {
 			</div>
 			<div className="main">
 				<div className="info">
-					<strong> Crop insurance with blockchain technologies. </strong>
+					<strong> Agricultural insurance<br/>made <Cursor
+						items={['quick.','simple.','secure.']} cursor={false} pause={1000} emptyPause={500} 
+					/> </strong>
 					<div>
-						We use blockchain systems to strengthen our policies and your insurance claims.
+						We use satellites and blockchain based policies to make sure you get your claims.<br/>Almost Immediately.
 					</div>
 				</div>
 				<div className="sign-in">
-					Already Registered?
+				Already Signed Up?
 					<span
 						onClick={() => setAuthScreen('login')} >
-						login</span>
+						Login</span>
 				</div>
 			</div>
 		</div>
