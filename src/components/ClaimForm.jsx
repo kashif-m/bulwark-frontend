@@ -1,17 +1,34 @@
 
 import React, {useState, useEffect} from 'react'
+import axios from 'axios'
 
 // SVGs
 import InfoIcon from '../assets/images/info.svg'
 import CloseIcon from '../assets/images/close.svg'
+import CrossIcon from '../assets/images/cross.svg'
 
 const ClaimForm = props => {
 
 	const {user, updateClaimFormView} = props
 	const {insurance} = user
+	const [err, setErr] = useState(false)
+
+	 useEffect(() => {
+	 	setErr(false)
+	 },[updateClaimFormView])
 
 	const canClaim = () => {
-
+		axios.get('http://localhost:5000/bulwark/claim', {headers: {Authorization: user.token}})
+			.then(res =>{
+				console.log(res)
+				if(res.data.err)
+					setErr(res.data.err);
+				else 
+				{
+					console.log("Claim receipt: \n"+res.data)
+				}
+			})
+			.catch(err => console.log(err))
 	}
 
   	return (
@@ -23,6 +40,15 @@ const ClaimForm = props => {
 				<span>Please fill out the necessary fields.</span>
 			</div>
 			<CloseIcon className='close' onClick={() => updateClaimFormView(false)} />
+			{
+					err ?
+					<div className="err"
+						onClick={() => setErr(false)} >
+						{err}
+						<CrossIcon />
+					</div>
+					: <div></div>
+			}
 			<div className="claim--land">
 				<div className="heading">Select your land</div>
 	  			<select name="claim--land" id="claim--land">

@@ -27,7 +27,12 @@ class Dash extends Component {
 		this.state = {
 			selectedOption: 'claims',
 			viewClaimForm: false,
-			wallet: ''
+			wallet: '',
+			weather:{
+				temp: '25',
+				humidity: '73%',
+				info: 'Cloudy'
+			}
 		}
 	}
 
@@ -179,20 +184,23 @@ class Dash extends Component {
 			</div>
 		)
 	}
-
+	getWeather = () =>{
+		const [user, updateUser] = this.props.user
+		axios.get('http://localhost:5000/bulwark/getWeather', {headers: {Authorization: user.token}})
+		.then(data=>{
+				console.log(data);
+				this.setState({weather : data});
+				return
+		}).catch(err=>{console.log(err)})
+	}
 	renderOverview = () => {
 		const [user] = this.props.user
 		const {insurance} = user
-		const weather = {
-			temp: '25',
-			rain: '73%',
-			info: 'Mostly Cloudy'
-		}
-
 		const nextPayment = (date, interval) => {
-			return "2nd Feb, 2023"
+			var result = new Date(date);
+  			result.setDate(result.getDate() + interval);
+  			return result.toDateString();
 		}
-
 		const getLocation = ({lat, lon}) => {
 			return "Bangalore"
 		}
@@ -237,13 +245,13 @@ class Dash extends Component {
 							</div>
 							<div className="temp">
 								<TempIcon />
-								<span>{weather.temp}</span>
+								<span>{this.state.weather.temp}</span>
 							</div>
 							<div className="rain">
 								<RainIcon />
-								<span>{weather.rain}</span>
+								<span>{this.state.weather.humidity}</span>
 							</div>
-							<div className="condition">{weather.info}</div>
+							<div className="condition">{this.state.weather.info}</div>
 						</div>
 					</div>
 				</div>
@@ -287,6 +295,26 @@ class Dash extends Component {
 	}
 
 	renderTransactionHistory = history => {
+		const [user] = this.props.user
+		var previous=[];
+		
+		// axios.get('http://localhost:5000/bulwark/getTransactions', {headers: {Authorization: user.token}})
+		// 		.then(res => { return res.data; })
+		// 		.then(data=>{
+					
+		// 			data.map(each=>{ 
+		// 				const temp = (
+		// 					<div>
+		// 						<span>{each.time}</span>
+		// 						<span>{each.from}</span>
+		// 						<span>{each.to}</span>
+		// 						<span>{each.value}</span>
+		// 						<span>{each.blockNumber}</span>
+		// 					</div>
+		// 				)
+		// 				previous.push(temp);
+		// 			})
+		// 		}).catch(console.log)
 		return (
 			<div className="transaction-history">
 				<div className="headers">
@@ -294,7 +322,7 @@ class Dash extends Component {
 					<span>Sender</span>
 					<span>Receiver</span>
 					<span>Amount</span>
-					<span>Balance</span>
+					<span>Block</span>
 				</div>
 			</div>
 		)
