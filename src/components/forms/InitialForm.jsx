@@ -52,8 +52,7 @@ const InitialForm = props => {
             temp[form][key] = value
         }
         else temp[form][key] = value
-        
-        console.log(form, key, value)
+
         setData(temp)
     }
 
@@ -125,8 +124,6 @@ const InitialForm = props => {
         if(navigator.geolocation) navigator.geolocation.getCurrentPosition(pos => {
             updateData('lat', pos.coords.latitude)
             updateData('lon', pos.coords.longitude)
-
-            console.log(data)
         })
         else updateData('info', ' Geolocation API is not available.')
     }

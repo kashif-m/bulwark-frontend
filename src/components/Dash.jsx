@@ -2,6 +2,8 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 
+import {getFormattedDate} from '../util/helpers'
+
 // SVG
 import AccountIcon from '../assets/images/account.svg'
 import AddIcon from '../assets/images/add.svg'
@@ -25,7 +27,7 @@ class Dash extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			selectedOption: 'overview',
+			selectedOption: 'claims',
 			viewClaimForm: false,
 			wallet: '',
 			weather: {
@@ -33,7 +35,8 @@ class Dash extends Component {
 				humidity: '-',
 				info: 'loading ...',
 				location: 'Bangalore'
-			}
+			},
+			claims: 'loading'
 		}
 	}
 
@@ -42,6 +45,8 @@ class Dash extends Component {
 	componentDidMount() {
 		const [user] = this.props.user
 		if(user.configured) this.getWeather()
+
+		this.getClaims()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -49,6 +54,36 @@ class Dash extends Component {
 			if(this.state.viewClaimForm) this.setState({viewClaimForm: false})
 			if(this.state.selectedOption === 'overview' && this.state.weather.temp === '-') this.getWeather()
 		}
+		if(prevState.viewClaimForm !== this.state.viewClaimForm
+			&& prevState.viewClaimForm) this.getClaims()
+	}
+
+	getClaims = () => {
+		const [user] = this.props.user
+
+		axios.get('http://localhost:5000/user/claims', {headers: {Authorization: user.token}})
+			.then(res => this.setState({claims: res.data.claims ? res.data.claims.reverse() : []}))
+			.catch(err => {
+				console.log('Check bulwark console ?')
+				console.log(err.response.data)
+			})
+	}
+
+	getWeather = () =>{
+		const [user] 	 = this.props.user
+		const {lat, lon} = user.insurance.location
+		axios.get(`http://localhost:5000/util/getWeather?lat=${lat}&lon=${lon}`)
+			.then(res => {
+				this.setState({weather: res.data.weather});
+			})
+			.catch(err => {
+				console.log(err)
+				this.setState({weather: {
+					temp: '-',
+					humidity: '-',
+					info: 'Troubles updating'
+				}})
+			})
 	}
 
 	payPremium = () => {
@@ -139,6 +174,38 @@ class Dash extends Component {
 		)
 	}
 
+	renderClaimList = () => {
+		const claims = this.state.claims
+		return (
+			<div className="claim-list">
+				{
+					claims === 'loading'
+					? <div className='loading' >
+						<span>Loading your claims ...</span>
+					</div>
+					: claims.length > 0
+					? <React.Fragment>
+						{
+							claims.map(claim => {
+								const {processed, date, _id, land} = claim
+								return (
+									<div className={`claim ${processed ? 'success' : 'error'}`} key={_id} >
+										<div className='survey' >{land}</div>
+										<div className='date' >{getFormattedDate(date)}</div>
+										<div className='details' onClick={() => this.setState({viewClaimForm: claim})} >View details</div>
+									</div>
+								)
+							})
+						}
+					</React.Fragment>
+					: <div className='none' >
+						<span>No claims made yet.</span>
+					</div>
+				}
+			</div>
+		)
+	}
+
 	renderClaims = () => {
 		const [user] = this.props.user
 		const {viewClaimForm} = this.state
@@ -147,6 +214,7 @@ class Dash extends Component {
 				{
 					viewClaimForm ?
 						<ClaimForm
+							claim={viewClaimForm}
 							updateClaimFormView={this.updateClaimFormView}
 							user={user} />
 					: <React.Fragment>
@@ -168,6 +236,7 @@ class Dash extends Component {
 								</div> : null
 							}
 						</div>
+						{this.renderClaimList()}
 					</React.Fragment>
 				}
 			</div>
@@ -194,22 +263,6 @@ class Dash extends Component {
 		)
 	}
 
-	getWeather = () =>{
-		const [user] 	 = this.props.user
-		const {lat, lon} = user.insurance.location
-		axios.get(`http://localhost:5000/util/getWeather?lat=${lat}&lon=${lon}`)
-			.then(res => {
-				this.setState({weather: res.data.weather});
-			})
-			.catch(err => {
-				console.log(err)
-				this.setState({weather: {
-					temp: '-',
-					humidity: '-',
-					info: 'Troubles updating'
-				}})
-			})
-	}
 	renderOverview = () => {
 		const [user] = this.props.user
 		const {insurance} = user

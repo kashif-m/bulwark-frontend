@@ -173,6 +173,47 @@
 					padding: 0 10 5 0
 					font-size: 20
 					border-bottom: 1px solid $gray_platinum
+		.claim-list
+			padding: 10 0 150 10
+			display: flex
+			flex-flow: column
+			overflow: auto
+			& > .loading, & > .none
+				span
+					margin-left: 10
+					font-size: 20
+			.claim
+				display: grid
+				grid-template-columns: repeat(2, max-content)
+				grid-template-rows: repeat(2, max-content)
+				cursor: pointer
+				border-radius: 2px
+				color: white
+				width: max-content
+				margin: 10 0
+				padding: 10 20
+				&.error
+					background-color: $red
+					&:hover
+						background-color: #FF331E
+				&.success
+					background-color: $green_spring
+					&:hover
+						background-color: #1BCA3B
+
+				.survey
+					font:
+						size: 25
+						weight: 900
+				.details
+					align-self: flex-end
+					margin-left: 20
+					grid-column: -2 / -1
+					grid-row: 1 / -1
+					color: #E1E1E1
+					font-size: 16
+					&:hover
+						color: white
 
 	.account
 		.options

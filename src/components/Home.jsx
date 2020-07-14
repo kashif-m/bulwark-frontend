@@ -35,7 +35,6 @@ const Home = props => {
 
 		axios.post('http://localhost:5000/user/new', data)
 			.then(res => {
-				console.log(res.data)
 				if(res.data.msg) {
 					setAuthScreen('login')
 					setErr(false)
@@ -60,7 +59,6 @@ const Home = props => {
 		axios.post('http://localhost:5000/user/login', _data)
 			.then(res => {
 				if(res.data.user) props.updateUser(res.data.user)
-				console.log('updated')
 			})
 			.catch(err => {
 				if(err.response) {

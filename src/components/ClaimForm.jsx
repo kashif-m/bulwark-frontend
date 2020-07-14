@@ -2,6 +2,8 @@
 import React, {useState, useEffect} from 'react'
 import axios from 'axios'
 
+import {getFormattedDate} from '../util/helpers'
+
 // SVGs
 import InfoIcon from '../assets/images/info.svg'
 import CloseIcon from '../assets/images/close.svg'
@@ -9,7 +11,7 @@ import CrossIcon from '../assets/images/cross.svg'
 
 const ClaimForm = props => {
 
-	const {user, updateClaimFormView} = props
+	const {user, updateClaimFormView, claim} = props
 	const {insurance} = user
 	const [err, setErr] = useState(false)
 	const [status, setStatus] = useState(false)
@@ -23,10 +25,7 @@ const ClaimForm = props => {
 
 		setStatus('loading')
 		axios.post('http://localhost:5000/bulwark/claim', {data: claim}, {headers: {Authorization: user.token}})
-			.then(res => {
-				console.log(res.data)
-				setStatus(res.data)
-			})
+			.then(res => setStatus(res.data))
 			.catch(err => {
 				console.log(err)
 				setStatus({
@@ -86,17 +85,8 @@ const ClaimForm = props => {
 		)
 	}
 
-	const getFormattedDate = date => {
-		const monthNames = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-		const dateObj = new Date(date)
-		let month = monthNames[dateObj.getMonth()];
-		let day = String(dateObj.getDate()).padStart(2, '0');
-		let year = dateObj.getFullYear();
-		return `${day} ${month}, ${year}`
-	}
-
-	const renderTransactionScreen = () => {
-		const {date, _id, land, cause, info, processed} = status
+	const renderTransactionScreen = (claim = false) => {
+		const {date, _id, land, cause, info, processed} = claim ? claim : status
 		const formattedDate = getFormattedDate(date)
 		const heading = processed ? 'Your claim was successfully processed.' : 'Your claim could not be proccessed.'
 
@@ -131,11 +121,19 @@ const ClaimForm = props => {
   	return (
 	
 		<div className='claim-form'>
-			<div className="heading">Insurance Claim</div>
 			{
-				status === false ? renderForm()
-				: status === 'loading' ? renderLoadingScreen()
-				: status ? renderTransactionScreen()
+				claim === true
+				? <React.Fragment>
+					<div className="heading">Insurance Claim</div>
+					{
+						status === false ? renderForm()
+						: status === 'loading' ? renderLoadingScreen()
+						: status ? renderTransactionScreen()
+						: null
+					}
+				</React.Fragment>
+				: Object.keys(claim).length > 0
+				? renderTransactionScreen(claim)
 				: null
 			}
 		</div>
