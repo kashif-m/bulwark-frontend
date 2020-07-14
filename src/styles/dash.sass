@@ -112,12 +112,19 @@
 								size: 19
 								weight: 900
 			.weather
+				&.loading .details
+					background-color: $orange_pumpkin
+				&.err .details
+					background-color: $red
+
 				.details
+					min-width: 200
 					cursor: pointer
 					max-width: max-content
 					padding: 20 40 20 40
 					border-radius: 3px
 					background-color: #1DA4ED
+					transition: all .2s
 					.condition
 						margin-top: 20
 						font-size: 18

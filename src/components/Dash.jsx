@@ -25,22 +25,29 @@ class Dash extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			selectedOption: 'claims',
+			selectedOption: 'overview',
 			viewClaimForm: false,
 			wallet: '',
-			weather:{
-				temp: '25',
-				humidity: '73%',
-				info: 'Cloudy'
+			weather: {
+				temp: '-',
+				humidity: '-',
+				info: 'loading ...',
+				location: 'Bangalore'
 			}
 		}
 	}
 
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
 
+	componentDidMount() {
+		this.getWeather()
+	}
+
 	componentDidUpdate(prevProps, prevState) {
-		if(prevState.selectedOption !== this.state.selectedOption
-			&& this.state.viewClaimForm) this.setState({viewClaimForm: false})
+		if(prevState.selectedOption !== this.state.selectedOption) {
+			if(this.state.viewClaimForm) this.setState({viewClaimForm: false})
+			if(this.state.selectedOption === 'overview' && this.state.weather.temp === '-') this.getWeather()
+		}
 	}
 
 	payPremium = () => {
@@ -184,28 +191,38 @@ class Dash extends Component {
 			</div>
 		)
 	}
+
 	getWeather = () =>{
-		const [user, updateUser] = this.props.user
-		axios.get('http://localhost:5000/bulwark/getWeather', {headers: {Authorization: user.token}})
-		.then(data=>{
-				console.log(data);
-				this.setState({weather : data});
-				return
-		}).catch(err=>{console.log(err)})
+		const [user] 	 = this.props.user
+		const {lat, lon} = user.insurance.location
+		axios.get(`http://localhost:5000/util/getWeather?lat=${lat}&lon=${lon}`)
+			.then(res => {
+				this.setState({weather: res.data.weather});
+			})
+			.catch(err => {
+				console.log(err)
+				this.setState({weather: {
+					temp: '-',
+					humidity: '-',
+					info: 'Troubles updating'
+				}})
+			})
 	}
 	renderOverview = () => {
 		const [user] = this.props.user
 		const {insurance} = user
+		const weather = this.state.weather
 		const nextPayment = (date, interval) => {
 			var result = new Date(date);
   			result.setDate(result.getDate() + interval);
   			return result.toDateString();
 		}
-		const getLocation = ({lat, lon}) => {
-			return "Bangalore"
-		}
+		const weatherClass = weather.info.match(/troubles/i) ? 'weather err'
+							: weather.info.match(/loading/) ? 'weather loading'
+							: 'weather'
+
 		return (
-			<div className="overview">
+			<div className="overview" >
 				<div className="heading">Overview</div>
 				<div className="info">
 					<InfoIcon />
@@ -236,22 +253,29 @@ class Dash extends Component {
 							}
 						</div>
 					</div>
-					<div className="weather">
+					<div className={weatherClass} onClick={() => {
+								const temp = {...this.state.weather}
+								temp.info = 'loading ...'
+								this.setState({
+									weather: temp
+								})
+								this.getWeather()
+							}} >
 						<div className="heading">Weather in your area</div>
 						<div className='details'>
 							<div className="location">
 								<LocationIcon />
-								<span className="val">{getLocation(insurance.location)}</span>
+								<span className="val">{weather.location}</span>
 							</div>
 							<div className="temp">
 								<TempIcon />
-								<span>{this.state.weather.temp}</span>
+								<span>{weather.temp}</span>
 							</div>
 							<div className="rain">
 								<RainIcon />
-								<span>{this.state.weather.humidity}</span>
+								<span>{weather.humidity}</span>
 							</div>
-							<div className="condition">{this.state.weather.info}</div>
+							<div className="condition">{weather.info}</div>
 						</div>
 					</div>
 				</div>
