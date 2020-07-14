@@ -1,5 +1,4 @@
 .claim-form
-    position: absolute
     z-index: 100
     background-color: white
     display: grid
@@ -28,8 +27,6 @@
         cursor: pointer
         grid-column: -2 / -1
         grid-row: 1 / 3
-    & > div:nth-child(4)
-        margin-top: 30
     & > div
         grid-column: 1 / -1
         .heading
@@ -55,11 +52,16 @@
             size: 20
             family: ProductSansBold
         transition: all .3s
+        &.loading
+            cursor: not-allowed
+            background-color: #A1A1A1
+            &:hover
+                background-color: #B1B1B1
         &:hover
             background-color: #2D5DE2
             transition: all .1s
     
-    .err
+    & > .err
         display: flex
         justify-self: flex-start
         align-self: center
@@ -69,7 +71,62 @@
         padding: 3 15
         cursor: pointer
         font-size: 12
-        margin-bottom: 10
+        margin-left: 20
+        align-self: center
+        &.none
+            background-color: white
+            height: 21
+            padding: 0
         svg
             align-self: center
             margin-left: 10
+
+    .loading
+        background-color: $orange_pumpkin
+    .claim.error
+        background-color: $red
+    .claim.success
+        background-color: $green_spring
+    .claim.success, .claim.error
+        .claim-info
+            .info
+                font-size: 20
+                margin-bottom: 10
+            .date, .id, .survey, .cause
+                margin-top: 5
+                margin-left: 10
+                font:
+                    size: 16
+                    weight: 100
+                span:nth-child(1)
+                    font-weight: 900
+                    margin-right: 10
+    .loading, .claim.success, .claim.error
+        margin-top: 20
+        padding: 20
+        border-radius: 2px
+        font:
+            size: 25
+            weight: 900
+        color: white
+        .info
+            display: flex
+            align-items: center
+            margin-top: 20
+            svg path
+                fill: white
+            span
+                margin-left: 5
+                font:
+                    size: 13
+                    weight: 100
+
+    .back
+        cursor: pointer
+        background-color: $blue_celtic
+        border-radius: 2px
+        padding: 5 15
+        width: max-content
+        color: white
+        font-weight: 900
+        margin-top: 20

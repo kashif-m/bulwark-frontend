@@ -40,7 +40,8 @@ class Dash extends Component {
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
 
 	componentDidMount() {
-		this.getWeather()
+		const [user] = this.props.user
+		if(user.configured) this.getWeather()
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -143,30 +144,31 @@ class Dash extends Component {
 		const {viewClaimForm} = this.state
 		return (
 			<div className="claims">
-				<div className="heading">View Claims</div>
-				<div className="info">
-					<InfoIcon />
-					<span>All your claims as recorded on the blockchain.</span>
-				</div>
-				<div className="options">
-					<div className="option"
-						onClick={() => this.setState({viewClaimForm: true})} >
-						<AddIcon />
-						Insurance Claim
-					</div>
-					{
-						user.claims ?
-						<div className="option">
-							<div className="heading">Current Claims</div>
-						</div> : null
-					}
-				</div>
 				{
 					viewClaimForm ?
 						<ClaimForm
 							updateClaimFormView={this.updateClaimFormView}
 							user={user} />
-					: null
+					: <React.Fragment>
+						<div className="heading">View Claims</div>
+						<div className="info">
+							<InfoIcon />
+							<span>All your claims as recorded on the blockchain.</span>
+						</div>
+						<div className="options">
+							<div className="option"
+								onClick={() => this.setState({viewClaimForm: true})} >
+								<AddIcon />
+								Insurance Claim
+							</div>
+							{
+								user.claims ?
+								<div className="option">
+									<div className="heading">Current Claims</div>
+								</div> : null
+							}
+						</div>
+					</React.Fragment>
 				}
 			</div>
 		)
