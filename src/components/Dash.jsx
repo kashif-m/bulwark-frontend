@@ -189,10 +189,11 @@ class Dash extends Component {
 							claims.map(claim => {
 								const {processed, date, _id, land} = claim
 								return (
-									<div className={`claim ${processed ? 'success' : 'error'}`} key={_id} >
+									<div className={`claim ${processed ? 'success' : 'error'}`} key={_id}
+										onClick={() => this.setState({viewClaimForm: claim})} >
 										<div className='survey' >{land}</div>
 										<div className='date' >{getFormattedDate(date)}</div>
-										<div className='details' onClick={() => this.setState({viewClaimForm: claim})} >View details</div>
+										<div className='details'>View details</div>
 									</div>
 								)
 							})
