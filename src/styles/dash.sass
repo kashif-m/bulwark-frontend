@@ -46,17 +46,23 @@
 				align-items: center
 				display: flex
 				cursor: pointer
-				padding: 10 20
-				margin-bottom: 10
+				margin-bottom: 30
 				border-radius: 100px
 				font:
 					size: 18
+
+				span
+					padding: 7 20
+
 
 				svg
 					margin-right: 20
 
 				&.selected
-					background-color: $gray_platinum
+					span
+						background-color: $gray_platinum
+						border-radius: 100px
+						transition: all .2s
 
 	.claims, .account, .overview, .wallet, .blockchain, .pay-premium, .add-wallet
 		overflow: auto
@@ -124,7 +130,7 @@
 					padding: 20 40 20 40
 					border-radius: 3px
 					background-color: #1DA4ED
-					transition: all .2s
+					transition: background-color .2s
 					.condition
 						margin-top: 20
 						font-size: 18
@@ -192,13 +198,23 @@
 				width: max-content
 				margin: 10 0
 				padding: 10 20
+				&.processing
+					background-color: $orange_pumpkin
+					transition: .3s
+					&:hover
+						transition: .1s
+						background-color: #FF623A
 				&.error
 					background-color: $red
+					transition: .3s
 					&:hover
+						transition: .1s
 						background-color: #FF331E
 				&.success
 					background-color: $green_spring
+					transition: .3s
 					&:hover
+						transition: .1s
 						background-color: #1BCA3B
 
 				.survey
@@ -315,10 +331,10 @@
 					padding: 3 15
 					cursor: pointer
 					grid-column: -2 / -1
-					transition: .3s all
+					transition: .3s background-color
 					&:hover
 						background-color: #3A3A3A
-						transition: .15s all
+						transition: .15s background-color
 				& > .heading
 					align-self: center
 					font:

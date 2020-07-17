@@ -25,15 +25,15 @@ const ClaimForm = props => {
 		if(claim.cause === '') return setErr('Please select a reason.')
 
 		setStatus('loading')
-		// axios.post('http://localhost:5000/bulwark/claim', {data: claim}, {headers: {Authorization: user.token}})
-		// 	.then(res => setStatus(res.data))
-		// 	.catch(err => {
-		// 		console.log(err)
-		// 		setStatus({
-		// 			info: {processed: false},
-		// 			err: 'Network issues'
-		// 		})
-		// 	})
+		axios.post('http://localhost:5000/bulwark/claim', {data: claim}, {headers: {Authorization: user.token}})
+			.then(res => setStatus(res.data))
+			.catch(err => {
+				console.log(err)
+				setStatus({
+					info: {processed: false},
+					err: 'Network issues'
+				})
+			})
 	}
 
 	const renderForm = () => {
