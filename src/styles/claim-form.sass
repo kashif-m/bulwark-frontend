@@ -74,7 +74,8 @@
         margin-left: 20
         align-self: center
         &.none
-            background-color: white
+            & > svg
+                display: none
             height: 21
             padding: 0
         svg
@@ -123,10 +124,13 @@
 
     .back
         cursor: pointer
-        background-color: $blue_celtic
+        background-color: #A1A1A1
         border-radius: 2px
-        padding: 5 15
+        padding: 10
+        border-radius: 100px
         width: max-content
-        color: white
-        font-weight: 900
-        margin-top: 20
+        transition: .3s
+        &:hover
+            background-color: #515151
+            transition: background-color .05s
+

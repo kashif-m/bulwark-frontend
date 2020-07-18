@@ -7,6 +7,7 @@ import {getFormattedDate} from '../util/helpers'
 // SVG
 import AccountIcon from '../assets/images/account.svg'
 import AddIcon from '../assets/images/add.svg'
+import BitcoinIcon from '../assets/images/bitcoin.svg'
 import BlockchainIcon from '../assets/images/blockchain.svg'
 import BulwarkLogo from '../assets/images/bulwarklogo.svg'
 import ClaimIcon from '../assets/images/claim.svg'
@@ -187,12 +188,16 @@ class Dash extends Component {
 					? <React.Fragment>
 						{
 							claims.map(claim => {
-								const {processed, date, _id, land} = claim
+								const {status, processed, date, _id, land} = claim
 								return (
-									<div className={`claim ${processed ? 'success' : 'error'}`} key={_id} >
+									<div className={`claim ${processed ? 'success'
+													: status === 'fail' ? 'error'
+													: status === 'processing' ? 'processing'
+													: 'success' }`} key={_id}
+										onClick={() => this.setState({viewClaimForm: claim})} >
 										<div className='survey' >{land}</div>
 										<div className='date' >{getFormattedDate(date)}</div>
-										<div className='details' onClick={() => this.setState({viewClaimForm: claim})} >View details</div>
+										<div className='details'>View details</div>
 									</div>
 								)
 							})
@@ -308,16 +313,17 @@ class Dash extends Component {
 							}
 						</div>
 					</div>
-					<div className={weatherClass} onClick={() => {
-								const temp = {...this.state.weather}
-								temp.info = 'loading ...'
-								this.setState({
-									weather: temp
-								})
-								this.getWeather()
-							}} >
+					<div className={weatherClass}>
 						<div className="heading">Weather in your area</div>
-						<div className='details'>
+						<div className='details'
+								onClick={() => {
+									const temp = {...this.state.weather}
+									temp.info = 'loading ...'
+									this.setState({
+										weather: temp
+									})
+									this.getWeather()
+								}} >
 							<div className="location">
 								<LocationIcon />
 								<span className="val">{weather.location}</span>
@@ -434,6 +440,11 @@ class Dash extends Component {
 									<DashboardIcon />
 									<span>Overview</span>
 								</div>
+								<div className={`option${selectedOption === 'pay-premium' ? ' selected' : ''}`}
+									onClick={() => this.setState({selectedOption: 'pay-premium'})} >
+									<BitcoinIcon />
+									<span>Pay Premium</span>
+								</div>
 								<div className={`option${selectedOption === 'account' ? ' selected' : ''}`}
 									onClick={() => this.setState({selectedOption: 'account'})} >
 									<AccountIcon />
@@ -468,6 +479,7 @@ class Dash extends Component {
 					: user.configured && !user.insurance.insured ? this.renderPayPremiumPage()
 					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'overview' ? this.renderOverview()
+					: selectedOption === 'pay-premium' ? this.renderPayPremiumPage()
 					: selectedOption === 'claims' ? this.renderClaims()
 					: selectedOption === 'wallet' ? this.renderWallet()
 					: selectedOption === 'blockchain' ? this.renderBlockchain()

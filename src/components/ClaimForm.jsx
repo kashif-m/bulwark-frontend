@@ -5,9 +5,10 @@ import axios from 'axios'
 import {getFormattedDate} from '../util/helpers'
 
 // SVGs
-import InfoIcon from '../assets/images/info.svg'
+import BackIcon from '../assets/images/back.svg'
 import CloseIcon from '../assets/images/close.svg'
 import CrossIcon from '../assets/images/cross.svg'
+import InfoIcon from '../assets/images/info.svg'
 
 const ClaimForm = props => {
 
@@ -38,6 +39,7 @@ const ClaimForm = props => {
 	const renderForm = () => {
 		return (
 			<React.Fragment>
+				<div className="heading">Insurance Claim</div>
 				<div className="info">
 					<InfoIcon />
 					<span>Please fill out the necessary fields.</span>
@@ -72,6 +74,9 @@ const ClaimForm = props => {
 	const renderLoadingScreen = () => {
 		return (
 			<React.Fragment>
+				<div className="back" onClick={() => updateClaimFormView(false)} >
+					<BackIcon />
+				</div>
 				<div className="loading">
 					Your claim is being processed. <br/>
 					Come back here later. <br/>
@@ -80,7 +85,6 @@ const ClaimForm = props => {
 						<span>This can take upto 15 minutes.</span>
 					</div>
 				</div>
-				<div className="back" onClick={() => updateClaimFormView(false)} >Go Back</div>
 			</React.Fragment>
 		)
 	}
@@ -92,6 +96,9 @@ const ClaimForm = props => {
 
 		return (
 			<React.Fragment>
+				<div className="back" onClick={() => updateClaimFormView(false)} >
+					<BackIcon />
+				</div>
 				<div className={`claim ${processed ? 'success' : 'error'}`}>
 					<div>{heading}</div>
 					<div className="claim-info">
@@ -114,7 +121,6 @@ const ClaimForm = props => {
 						</div>
 					</div>
 				</div>
-				<div className="back" onClick={() => updateClaimFormView(false)} >Go Back</div>
 			</React.Fragment>
 		)
 	}
@@ -124,7 +130,6 @@ const ClaimForm = props => {
 			{
 				claim === true
 				? <React.Fragment>
-					<div className="heading">Insurance Claim</div>
 					{
 						status === false ? renderForm()
 						: status === 'loading' ? renderLoadingScreen()
