@@ -14,3 +14,9 @@ This repo serves the frontend interface as a web application.
 
 ### Compiling for production use
 - Run `npm run build`
+
+### Developers
+* [Kashif M](https://github.com/kashif-m)
+* [Sohini Sahukar](https://github.com/sohinisahukar)
+* [Vivek T A](https://github.com/vivek32ta)
+* [M S Nikhil](https://github.com/msnikhil03)
