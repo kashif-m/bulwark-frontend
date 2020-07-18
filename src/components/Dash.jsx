@@ -7,16 +7,19 @@ import {getFormattedDate} from '../util/helpers'
 // SVG
 import AccountIcon from '../assets/images/account.svg'
 import AddIcon from '../assets/images/add.svg'
+import BackIcon from '../assets/images/back.svg'
 import BitcoinIcon from '../assets/images/bitcoin.svg'
 import BlockchainIcon from '../assets/images/blockchain.svg'
 import BulwarkLogo from '../assets/images/bulwarklogo.svg'
 import ClaimIcon from '../assets/images/claim.svg'
 import DashboardIcon from '../assets/images/dashboard.svg'
+import ExpiredIcon from '../assets/images/expired.svg'
 import InfoIcon from '../assets/images/info.svg'
-import WalletIcon from '../assets/images/wallet.svg'
-import TempIcon from '../assets/images/temperature.svg'
-import RainIcon from '../assets/images/rain.svg'
+import InsuredIcon from '../assets/images/insured.svg'
 import LocationIcon from '../assets/images/location.svg'
+import RainIcon from '../assets/images/rain.svg'
+import TempIcon from '../assets/images/temperature.svg'
+import WalletIcon from '../assets/images/wallet.svg'
 
 // components
 import ClaimForm from './ClaimForm.jsx'
@@ -28,7 +31,7 @@ class Dash extends Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			selectedOption: 'claims',
+			selectedOption: 'overview',
 			viewClaimForm: false,
 			wallet: '',
 			weather: {
@@ -37,7 +40,8 @@ class Dash extends Component {
 				info: 'loading ...',
 				location: 'Bangalore'
 			},
-			claims: 'loading'
+			claims: 'loading',
+			receipt: false
 		}
 	}
 
@@ -87,12 +91,24 @@ class Dash extends Component {
 			})
 	}
 
-	payPremium = () => {
+	signUp = () => {
 		const [user, updateUser] = this.props.user
 		axios.get('http://localhost:5000/insurance/new', {headers: {Authorization: user.token}})
 			.then(res => {
 				if(!res || !res.data) console.log({err: 'could not receive from backend'})
 				else res.data.user ? updateUser(res.data.user) : null
+			})
+			.catch(err => console.log(err.response.data))
+	}
+
+	payPremium = () => {
+		const [user, updateUser] = this.props.user
+		axios.get('http://localhost:5000/insurance/pay', {headers: {Authorization: user.token}})
+			.then(res => {
+				console.log(res.data)
+				if(!res || !res.data) console.log({err: 'could not receive from backend'})
+				else res.data.user ? updateUser(res.data.user) : null
+				if(res.data.receipt) this.setState({receipt: res.data.receipt})
 			})
 			.catch(err => console.log(err.response.data))
 	}
@@ -136,41 +152,131 @@ class Dash extends Component {
 		)
 	}
 
-	renderPayPremiumPage = () => {
-		const [user, updateUser] = this.props.user
-		const insurance = user.insurance
+	renderPayPremiumPage = (initial = false) => {
+
+		const nextPayment = (date, interval) => {
+			var result = new Date(date);
+			result.setDate(result.getDate() + interval);
+			return result.toDateString();
+		}
+
+		const [user, updateUser]		= this.props.user
+		const {selectedOption, receipt} = this.state
+
+		const insurance  = user.insurance
+		user._payPremium = ((insurance.coverage / 100) * 3).toFixed(2)
+		insurance.status = insurance.insured ? 'insured' : 'expired'
+
+		const date       = initial
+							? new Date()
+							: receipt ? receipt.date : insurance.date
+		const _interval  = initial
+							? insurance.interval
+							: receipt ? receipt.interval : insurance.interval
+		const from 		 = nextPayment(date, 0)
+		const to   		 = nextPayment(from, _interval)
+		const interval   = {from, to}
+		const {lat, lon} = insurance.location
 
 		return (
 			<div className="pay-premium">
-				<div className="heading">Pay First Premium</div>
-				<div className="info">
-					<InfoIcon />
-					<span>This amount will be deducted from your{user.keys.dev ? ' bulwark' : ''} wallet.</span>
-				</div>
-				<div className="options">
-					<div className="total">
-						<span className="heading">Amount to be paid</span>
-						<span className="value">{user.payPremium} ETH</span>
-					</div>
-					<div className="insurance-info">
-						<div className='heading'>For the following location and coverage</div>
-						<div className="edit" onClick={() => {
-							const temp = {...user}
-							temp.configured = false
-							updateUser(temp)
-						}} >edit</div>
-						<div className='item' >
-							<div className="heading">Location</div>
-							<div>Latitude: {insurance.location.lat}</div>
-							<div>Longitude: {insurance.location.lon}</div>
+				{
+					receipt
+					? <React.Fragment>
+						<div className="heading">Payment was successfull</div>
+						{
+							initial ? <div className="redirect">Redirecting you to dashboard ...</div>
+							: <div className="transaction-details">
+								<div className="heading">Transaction details</div>
+								<div className="options">
+									<div className="interval">
+										<div className="heading">Interval</div>
+										<div className="value">{interval.from} - {interval.to}</div>
+									</div>
+									<div className="land">
+										<div className="heading">Location</div>
+										<div className="lat">Latitude &ensp;&emsp; {lat}</div>
+										<div className="lon">Longitude &emsp;{lon}</div>
+									</div>
+									<div className="amount">
+										<div className="heading">Amount paid</div>
+										<div className="value">{receipt.amount_paid} ETH</div>
+									</div>
+									<div className="back" onClick={() => this.setState({receipt: false})} >
+										Go Back
+									</div>
+								</div>
+							</div>
+						}
+					</React.Fragment>
+					: initial || selectedOption === 'payment'
+					? <React.Fragment>
+						<div className="heading">Pay Premium</div>
+						<div className="info">
+							<InfoIcon />
+							<span>This is calculated based on your coverage amount.</span>
 						</div>
-						<div className='item' >
-							<div className="heading">Coverage Amount</div>
-							<div>{insurance.coverage} INR</div>
+						<div className="options">
+							<div className="total">
+								<div className="heading">Amount to be paid</div>
+								<div className="value">&ensp;{user.payPremium} ETH</div>
+								<div className="value INR">&ensp;{user._payPremium} INR</div>
+							</div>
+							<div className="insurance-info">
+								<div className={`heading${!initial ? ' non-edit' : ''}`}>For the following location and coverage</div>
+								{
+									initial ?
+										<div className="edit" onClick={() => {
+											const temp = {...user}
+											temp.configured = false
+											updateUser(temp)
+										}} >edit</div>
+									: null
+								}
+								<div className='location' >
+									<div className="heading">Location</div>
+									<div>Latitude: {lat}</div>
+									<div>Longitude: {lon}</div>
+								</div>
+								<div className='coverage' >
+									<div className="heading">Coverage Amount</div>
+									<div>{insurance.coverage} INR</div>
+								</div>
+								<div className="interval">
+									<div className="heading">Interval</div>
+									{interval.from} - {interval.to}
+								</div>
+							</div>
+							<div className="submit" onClick={() => initial ? this.signUp() : this.payPremium() }> PROCEED</div>
 						</div>
-					</div>
-					<div className="submit" onClick={() => this.payPremium()}>PROCEED</div>
-				</div>
+					</React.Fragment>
+					: <React.Fragment>
+						<div className="heading">Pay Premium</div>
+						<div className="info">
+							<InfoIcon />
+							<span>{insurance.status === 'insured' ? 'Payments done for this interval.' : 'Payments due for this interval.'}</span>
+						</div>
+						<div className="payment-details">
+							{
+								insurance.status === 'insured'
+								? <div className="next-premium">
+									Next Payment is on <span className="date">{nextPayment(insurance.date, insurance.interval)}</span>.
+								</div>
+								: insurance.status === 'expired'
+								? <React.Fragment>
+									<div className="next-premium">
+										Payment due for 
+										<div className="date"> {interval.from} - {interval.to} </div>
+									</div>
+									<div className={`pay ${insurance.status}`} onClick={() => this.setState({selectedOption: 'payment'})} >
+										Clear dues
+									</div>
+								</React.Fragment>
+								: ''
+							}							
+						</div>
+					</React.Fragment>
+				}
 			</div>
 		)
 	}
@@ -280,6 +386,7 @@ class Dash extends Component {
 		const weatherClass = weather.info.match(/troubles/i) ? 'weather err'
 							: weather.info.match(/loading/) ? 'weather loading'
 							: 'weather'
+		insurance.status = insurance.insured ? 'insured' : 'expired'
 
 		return (
 			<div className="overview" >
@@ -291,26 +398,29 @@ class Dash extends Component {
 				<div className="options">
 					<div className="insurance">
 						<div className="heading">Current Insurance Details</div>
-						<div className={`details${insurance.insured ? '' : ' expired'}`}>
-							{
-								insurance.insured ?
-								<React.Fragment>
-									<div className="status">
-										<span>{insurance.surveyNo}</span>
-										is insured.
-									</div>
-									<div className="next-premium">
-										<label>Next Payment</label>
-										<span>{nextPayment(insurance.date, insurance.interval)}</span>
-									</div>
-								</React.Fragment>
-								: <React.Fragment>
-									<div className="status">
-										<span>{insurance.surveyNo}</span>
-										has expired.
-									</div>
-								</React.Fragment>
-							}
+						<div className='details'>
+							<div className={`status ${insurance.status}`}>
+								{
+									insurance.status === 'insured'
+									? <React.Fragment>
+										<InsuredIcon />
+										<span>{insurance.status.toUpperCase()}</span>
+									</React.Fragment>
+									: <React.Fragment>
+										<ExpiredIcon />
+										<span>{insurance.status.toUpperCase()}</span>
+									</React.Fragment>
+								}
+							</div>
+							<div className="claim-details">
+								<span>{insurance.surveyNo}</span>
+								is {insurance.insured ? 'valid' : 'invalid'}.
+							</div>
+							<div className="next-premium"
+								onClick={() => this.setState({selectedOption: 'pay-premium'})} >
+								<label>Next Payment</label>
+								<span>{nextPayment(insurance.date, insurance.interval)}</span>
+							</div>
 						</div>
 					</div>
 					<div className={weatherClass}>
@@ -476,10 +586,10 @@ class Dash extends Component {
 				{
 					!user.configured ? <InitialForm user={[user, updateUser]} />
 					: user.configured && !user.insurance.insured && !user.keys.public ? this.renderAddWallet()
-					: user.configured && !user.insurance.insured ? this.renderPayPremiumPage()
+					: user.configured && !user.insurance.insured ? this.renderPayPremiumPage(true)
 					: selectedOption === 'account' ? this.renderAccountDetails()
 					: selectedOption === 'overview' ? this.renderOverview()
-					: selectedOption === 'pay-premium' ? this.renderPayPremiumPage()
+					: selectedOption.match(/(pay-premium|payment)/) ? this.renderPayPremiumPage()
 					: selectedOption === 'claims' ? this.renderClaims()
 					: selectedOption === 'wallet' ? this.renderWallet()
 					: selectedOption === 'blockchain' ? this.renderBlockchain()

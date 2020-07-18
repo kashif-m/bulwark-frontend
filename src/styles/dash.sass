@@ -69,6 +69,8 @@
 		display: flex
 		flex-flow: column
 		padding: 30 0 0 50
+		align-self: flex-start
+		// max-width: max-content
 		& > .heading
 			font:
 				size: 30
@@ -87,43 +89,83 @@
 		.options
 			padding-top: 20
 			.insurance
-				margin-bottom: 40
+				margin-bottom: 20
+				.heading
+					margin-bottom: 10
+				.details
+					.status
+						display: flex
+						align-items: center
+						cursor: pointer
+						color: white
+						width: max-content
+						padding: 1 8 1 8
+						border-radius: 3px
+						margin-bottom: 10
+						svg
+							margin-right: 2
+							padding: 4
+							border-radius: 2px
+
+						&.INSURED
+							svg
+								background-color: $green_forest
+						&.EXPIRED
+							svg
+								background-color: $red
+						span
+							border-radius: 100px
+							padding: 2 7 2 7
+							&.INSURED
+
+						font:
+							size: 12
+							weight: 900
+						span
+							margin-right: 5
+					.claim-details
+						padding-left: 5
+						margin-bottom: 15
+						font-size: 20
+						span
+							margin-right: 5
+							font-weight: 900
+					.next-premium
+						padding-left: 5
+						align-self: center
+						cursor: pointer
+						label
+							cursor: pointer
+							display: block
+							font:
+								size: 14
+								weight: 900
+						span
+							font:
+								size: 12
+								weight: 500
+							margin-right: 10
 			.insurance, .weather
 				& > .heading
 					max-width: max-content
 					border-bottom: 1px solid $gray_platinum
-					margin-bottom: 20
 					font:
 						family: ProductSansBold
 						size: 20
 				.details
-					cursor: pointer
 					max-width: max-content
-					padding: 20
-					border-radius: 3px
-					background-color: $green_spring
-					color: white
-					&.expired
-						background-color: $red
-					.status
-						margin-bottom: 20
-						font-size: 19
-						span
-							font-weight: 900
-							margin-right: 10
-					.next-premium
-						label
-							display: block
-							font:
-								size: 19
-								weight: 900
+
 			.weather
+				.heading
+					margin-bottom: 20
 				&.loading .details
 					background-color: $orange_pumpkin
 				&.err .details
 					background-color: $red
 
 				.details
+					padding: 20
+					color: white
 					min-width: 200
 					cursor: pointer
 					max-width: max-content
@@ -298,23 +340,26 @@
 
 	.pay-premium
 		.options
-			padding-left: 50
+			padding-left: 30
 			.total
-				margin: 50 0 30 0
+				margin: 20 0 30 0
 				display: flex
-				align-items: center
+				flex-flow: column
 				.heading
+					margin-bottom: 10
 					font:
-						size: 20
+						size: 16
+						weight: 900
+					padding: 0 20 5 0
+					max-width: max-content
+					border-bottom: 2px solid $gray_platinum
 				.value
+					margin: 5 0
 					cursor: pointer
-					margin-left: 30
 					display: flex
-					justify-content: center
-					align-items: center
 					font:
 						family: ProductSansBold
-						size: 30
+						size: 25
 			& > .insurance-info
 				display: grid
 				grid-template-columns: repeat(2, max-content)
@@ -340,9 +385,11 @@
 					font:
 						family: ProductSansRegular
 						size: 14
+					&.non-edit
+						grid-column: 1 / -1
 				
-				.item
-					padding-top: 20
+				.location, .coverage, .interval
+					padding-top: 15
 					.heading
 						color: black
 						font:
@@ -363,6 +410,55 @@
 				&:hover
 					transition: .15s all
 		            background-color: black
+
+		.payment-details
+			display: flex
+			flex-flow: column
+			max-width: max-content
+			.next-premium
+				margin: 15 0 0 5
+				font-size: 20
+				.date
+					font:
+						size: 20
+						weight: 900
+			.pay
+				cursor: pointer
+				width: max-content
+				margin: 15 0 0 5
+				padding: 5 10
+				border-radius: 2px
+				background-color: $blue_celtic
+				color: white
+
+		.transaction-details
+			margin: 15 0 0 5
+			& > .heading
+				font:
+					size: 22
+					weight: 900
+				border-bottom: 2px solid $gray_platinum
+				padding: 0 20 5 0
+				max-width: max-content
+			& > .options
+				padding-left: 10
+				display: flex
+				flex-flow: column
+				.heading
+					margin-top: 15
+					font:
+						size: 20
+						weight: 900
+
+			.back
+				background-color: $blue_celtic
+				margin-top: 20
+				max-width: max-content
+				padding: 5 10
+				border-radius: 3px
+				color: white
+				cursor: pointer
+
 
 	.add-wallet
 		.options

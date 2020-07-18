@@ -50,6 +50,12 @@ const InitialForm = props => {
             else if(value.to)
             console.log(value)
             temp[form][key] = value
+        } else if(key === 'name') {
+            const _temp = {...user}
+            const _value = value.length > 0 ? value : 'Mate'
+            _temp.name = _value
+            updateUser(_temp)
+            temp[form][key] = _value
         }
         else temp[form][key] = value
 
@@ -96,7 +102,8 @@ const InitialForm = props => {
             },
             interval,
             surveyNo,
-            coverage
+            coverage,
+            name: data.user.name
         }
 
         axios.post('http://localhost:5000/user/details', {insurance}, { headers: { Authorization: user.token } })
