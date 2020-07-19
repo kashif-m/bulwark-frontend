@@ -33,7 +33,8 @@ const Home = props => {
 	const createUser = () => {
 
 
-		axios.post('http://localhost:5000/user/new', data)
+		console.log(data)
+		axios.post('http://localhost:5000/user/new', {user: data})
 			.then(res => {
 				if(res.data.msg) {
 					setAuthScreen('login')
@@ -42,7 +43,8 @@ const Home = props => {
 			})
 			.catch(err => {
 				if(err.response) {
-					if(err.response.data.err) setErr(err.response.data.err)
+					console.log(err.response.data)
+					if(err.response.data.msg) setErr(err.response.data.msg)
 				}
 				else setErr('Could not connect to bulwark-backend.')
 			})
@@ -56,13 +58,14 @@ const Home = props => {
 			password
 		}
 
-		axios.post('http://localhost:5000/user/login', _data)
+		axios.post('http://localhost:5000/user/login', {user: _data})
 			.then(res => {
 				if(res.data.user) props.updateUser(res.data.user)
 			})
 			.catch(err => {
 				if(err.response) {
-					if(err.response.data.err) setErr(err.response.data.err)
+					console.log(err.response.data)
+					if(err.response.data.msg) setErr(err.response.data.msg)
 				}
 				else setErr('Could not connect to bulwark-backend.')
 			})

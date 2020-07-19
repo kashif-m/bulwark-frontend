@@ -4,11 +4,13 @@ import axios from 'axios'
 
 // SVG
 import InfoIcon from '../../assets/images/info.svg'
+import CrossIcon from '../../assets/images/cross.svg'
 
 const InitialForm = props => {
 
     const [user, updateUser] = props.user
     const [form, setForm] = useState('user')
+    const [err, setErr]   = useState(false)
     const [readable, setReadable] = useState({interval: '2 years', coverage: 'INR'})
     const [data, setData] = useState({
         user: {
@@ -110,7 +112,18 @@ const InitialForm = props => {
             .then(res => {
                 if(res.data.user) updateUser(res.data.user)
             })
-            .catch(err => console.log(err.response.data))
+            .catch(err => {
+                if(err.response) {
+                    console.log(err.response.data)
+                    if(err.response.data.msg) setErr(err.response.data.msg)
+                    const param = Object.keys(err.response.data.err)[0]
+                    const _form = param.match(/(aadhar|name)/i) ? 'user'
+                                    : param.match(/(survey|location)/i) ? 'location'
+                                    : param.match(/(interval|coverage)/i) ? 'insurance'
+                                    : form
+                    setForm(_form)
+                }
+            })
 	}
 
 	const personalDetails = () => {
@@ -192,11 +205,15 @@ const InitialForm = props => {
 
     const renderSubmitButton = () => <div className={`submit${data.insurance.interval === 0 || data.insurance.interval >= 1212 ? ' disabled' : ''}`}
                                             disabled={data.insurance.interval === 0 || data.insurance.interval >= 1212}
-                                            onClick={() => updateUserDetails()} >SUBMIT</div>
+                                            onClick={() => updateUserDetails()} >Submit</div>
+    const renderPrevButton = () => <div className="prev"
+                                            onClick={() => setForm(form === 'location' ? 'user'
+                                                                    : form === 'insurance' ? 'location'
+                                                                    : '' )}>Previous</div>
     const renderNextButton = () => <div className="next"
                                             onClick={() => setForm(form === 'user' ? 'location'
                                                                     : form === 'location' ? 'insurance'
-                                                                    : '' )} >NEXT</div>
+                                                                    : '' )} >Next</div>
 
     return (
         <div className='initial-form' >
@@ -212,18 +229,25 @@ const InitialForm = props => {
             </div>
 
             {
+                err ? <div className='err' onClick={() => setErr(false)} > {err} <CrossIcon /> </div>
+                : <div className='err none' > </div>
+            }
+
+            {
                 form === 'user' ? personalDetails()
                 : form === 'location' ? locationDetails()
                 : form === 'insurance' ? insuranceDetails()
                 : ''
             }
 
-            {
-                form === 'insurance'
-                ? renderSubmitButton()
-                : renderNextButton()
-            }
-
+            <div className="buttons">
+                { form !== 'user' ? renderPrevButton() : <div></div> }
+                {
+                    form === 'insurance'
+                    ? renderSubmitButton()
+                    : renderNextButton()
+                }
+            </div>
         </div>
     )
 }
