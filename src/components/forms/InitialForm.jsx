@@ -12,7 +12,7 @@ const InitialForm = props => {
     const [readable, setReadable] = useState({interval: '2 years', coverage: 'INR'})
     const [data, setData] = useState({
         user: {
-            name: '',
+            name: user.name,
             aadhar: ''
         },
         location: {
