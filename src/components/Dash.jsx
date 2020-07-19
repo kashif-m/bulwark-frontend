@@ -513,24 +513,26 @@ class Dash extends Component {
 		
 		return (
 			<table className="transaction-history">
-				<tr className="headers">
-					<th>Time</th>
-					<th>Hash</th>
-					<th>Amount</th>
-					<th>Block</th>
-				</tr>
-				
-				{this.state.transactions.map(each => {
-					return (
-						<tr>
-							<td className="timestamp">{each.timestamp}</td>
-							<td className="sender">{each.txhash}</td>
-							<td className="value">{each.value}</td>
-							<td className="block">{each.block}</td>
-						</tr>
-					)
-				})}
-				
+				<thead>
+					<tr className="headers">
+						<th>Time</th>
+						<th>Hash</th>
+						<th>Amount</th>
+						<th>Block</th>
+					</tr>
+				</thead>
+				<tbody>
+					{this.state.transactions.map(each => {
+						return (
+							<tr>
+								<td className="timestamp">{each.timestamp}</td>
+								<td className="sender">{each.txhash}</td>
+								<td className="value">{each.value}</td>
+								<td className="block">{each.block}</td>
+							</tr>
+						)
+					})}
+				</tbody>
 			</table>
 		)
 	}
