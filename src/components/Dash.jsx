@@ -1,7 +1,6 @@
 
 import React, { Component } from 'react'
 import axios from 'axios'
-
 import {getFormattedDate} from '../util/helpers'
 
 // SVG
@@ -41,7 +40,8 @@ class Dash extends Component {
 				location: 'Bangalore'
 			},
 			claims: 'loading',
-			receipt: false
+			receipt: false,
+			transactions:[]
 		}
 	}
 
@@ -52,6 +52,26 @@ class Dash extends Component {
 		if(user.configured) this.getWeather()
 
 		this.getClaims()
+
+		var previous=[];
+		
+		axios.get('http://localhost:5000/bulwark/getTransactions', {headers: {Authorization: user.token}})
+				.then(res => { return res.data; })
+				.then(data=>{
+					console.log(data);
+					data.map(each=>{ 
+						const temp = {
+							timestamp: each.time,
+							txhash: each.txhash,
+							receiver: each.to,
+							value: each.value,
+							block:each.blockNumber
+						}
+						previous.push(temp);
+					})
+					const newState=Object.assign({},this.state,{transactions:previous})
+					this.setState(newState)
+				}).catch(console.log)
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -490,36 +510,28 @@ class Dash extends Component {
 	}
 
 	renderTransactionHistory = history => {
-		const [user] = this.props.user
-		var previous=[];
 		
-		// axios.get('http://localhost:5000/bulwark/getTransactions', {headers: {Authorization: user.token}})
-		// 		.then(res => { return res.data; })
-		// 		.then(data=>{
-					
-		// 			data.map(each=>{ 
-		// 				const temp = (
-		// 					<div>
-		// 						<span>{each.time}</span>
-		// 						<span>{each.from}</span>
-		// 						<span>{each.to}</span>
-		// 						<span>{each.value}</span>
-		// 						<span>{each.blockNumber}</span>
-		// 					</div>
-		// 				)
-		// 				previous.push(temp);
-		// 			})
-		// 		}).catch(console.log)
 		return (
-			<div className="transaction-history">
-				<div className="headers">
-					<span>Timestamp</span>
-					<span>Sender</span>
-					<span>Receiver</span>
-					<span>Amount</span>
-					<span>Block</span>
-				</div>
-			</div>
+			<table className="transaction-history">
+				<tr className="headers">
+					<th>Time</th>
+					<th>Hash</th>
+					<th>Amount</th>
+					<th>Block</th>
+				</tr>
+				
+				{this.state.transactions.map(each => {
+					return (
+						<tr>
+							<td className="timestamp">{each.timestamp}</td>
+							<td className="sender">{each.txhash}</td>
+							<td className="value">{each.value}</td>
+							<td className="block">{each.block}</td>
+						</tr>
+					)
+				})}
+				
+			</table>
 		)
 	}
 

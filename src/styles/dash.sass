@@ -96,7 +96,7 @@
 					.status
 						display: flex
 						align-items: center
-						cursor: pointer
+						cursor: default
 						width: max-content
 						padding: 1 8 1 8
 						border-radius: 3px
@@ -169,7 +169,7 @@
 					cursor: pointer
 					max-width: max-content
 					padding: 20 40 20 40
-					border-radius: 3px
+					border-radius: 5px
 					background-color: #1DA4ED
 					transition: background-color .2s
 					.condition
@@ -323,19 +323,25 @@
 				.transaction-history
 					margin-top: 10
 					box-sizing: border-box
-					border-radius: 3px
-					padding: 10 10 5 10
 					width: max-content
-					background-color: $gray_platinum
-					.headers
+					th
+						border-radius: 3px
 						font:
-							size: 15
+							size: 20
 							family: Varela
-						display: grid
-						grid-template-columns: 120px repeat(4, 100px)
-						span
-							justify-self: flex-start
-							padding-left: 20
+						background-color: black
+						color: white
+						padding: 10 10 10 10
+					tr 
+						background-color: $gray_platinum
+						text-align: center
+
+					tr:nth-child(even)
+						background-color: #C8C8C8
+					td
+						font-size: 16
+						padding: 10 10 10 10
+						
 
 	.pay-premium
 		.options
