@@ -516,7 +516,7 @@ class Dash extends Component {
 				<thead>
 					<tr className="headers">
 						<th>Time</th>
-						<th>Hash</th>
+						<th>Transaction Hash</th>
 						<th>Amount</th>
 						<th>Block</th>
 					</tr>
