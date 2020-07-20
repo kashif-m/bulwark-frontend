@@ -564,20 +564,20 @@ class Dash extends Component {
 			<table className="transaction-history">
 				<thead>
 					<tr className="headers">
+						<th>Block</th>
 						<th>Time</th>
 						<th>Transaction Hash</th>
 						<th>Amount</th>
-						<th>Block</th>
 					</tr>
 				</thead>
 				<tbody>
 					{this.state.transactions.map(each => {
 						return (
 							<tr>
+								<td className="block">{each.block}</td>
 								<td className="timestamp">{each.timestamp}</td>
 								<td className="sender">{each.txhash}</td>
 								<td className="value">{each.value}</td>
-								<td className="block">{each.block}</td>
 							</tr>
 						)
 					})}
