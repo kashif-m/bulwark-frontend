@@ -224,7 +224,14 @@
 			padding: 10 0 150 10
 			display: flex
 			flex-flow: column
+			box-sizing: content-box
 			overflow: auto
+			width: 100%
+			overflow-x: hidden
+			max-height: calc(80vh - 171px)
+			&::-webkit-scrollbar
+				width: 0px
+				background: transparent
 			& > .loading, & > .none
 				span
 					margin-left: 10
@@ -306,9 +313,15 @@
 					cursor: pointer
 
 	.wallet
+		max-height: calc( 92vh - 40px )
 		.options
 			margin-left: 10
+			overflow: hidden
+			max-height: auto
 			.option
+				overflow: hidden
+				max-height: auto
+
 				.heading
 					padding: 25 20 5 0
 					width: max-content
@@ -321,11 +334,16 @@
 						size: 30
 
 				.transaction-history
-					margin-top: 10
+					margin-top: 20
 					box-sizing: border-box
 					width: max-content
 					display: block
-					max-height: 250px	
+					max-height: 60vh
+					overflow: auto
+					padding-bottom: 150
+					&::-webkit-scrollbar
+						width: 0px
+						background: transparent
 					th
 						border-radius: 3px
 						font:
@@ -503,29 +521,34 @@
 					cursor: not-allowed
 					background-color: $gray_platinum
 	.blockchain
+		overflow: hidden
+		max-height: 92vh
 		.transaction-history
-					margin-top: 10
-					box-sizing: border-box
-					width: max-content
-					display: block
-					max-height: 400px	
-					th
-						border-radius: 3px
-						font:
-							size: 20
-							family: Varela
-						background-color: black
-						color: white
-						padding: 10 10 10 10
-					tr 
-						background-color: white
-						text-align: center
+			padding-bottom: 150
+			overflow: auto
+			overflow-x: hidden
+			margin-top: 20
+			display: block
+			&::-webkit-scrollbar
+				width: 0px
+				background: transparent
+			th
+				border-radius: 3px
+				font:
+					size: 20
+					family: Varela
+				background-color: black
+				color: white
+				padding: 10 10 10 10
+			tr 
+				background-color: white
+				text-align: center
 
-					tr:nth-child(even)
-						background-color: $gray_platinum
-					td
-						font-size: 16
-						padding: 10 10 10 10
+			tr:nth-child(even)
+				background-color: $gray_platinum
+			td
+				font-size: 16
+				padding: 10 10 10 10
 
 @media (max-width: 640px)
 	.dash
