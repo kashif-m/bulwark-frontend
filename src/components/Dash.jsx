@@ -41,7 +41,8 @@ class Dash extends Component {
 			},
 			claims: 'loading',
 			receipt: false,
-			transactions:[]
+			transactions:[],
+			chain:[]
 		}
 	}
 
@@ -52,26 +53,51 @@ class Dash extends Component {
 		if(user.configured) this.getWeather()
 
 		this.getClaims()
+		this.getTransactions()
+		this.getBlockchain()	
+	}
 
-		var previous=[];
-		
+	getBlockchain = () => {
+		const [user] = this.props.user;
+		axios.get('http://localhost:5000/bulwark/getBlockchain', { headers: { Authorization: user.token } })
+			.then(res => { return res.data; })
+			.then(data => {
+				console.log(data);
+				var fullChain=[];
+				data.map(each => {
+					const temp = {
+						timestamp: each.time,
+						txhash: each.txhash,
+						block: each.blockNumber
+					}
+					fullChain.push(temp);
+				})
+				console.log("Fullchain: "+fullChain)
+				const newState = Object.assign({}, this.state, { chain: fullChain })
+				this.setState(newState)
+			}).catch(err => { console.log("[err: blockchain] " + err) })
+	}
+
+	getTransactions = () => {
+		const [user] = this.props.user;
 		axios.get('http://localhost:5000/bulwark/getTransactions', {headers: {Authorization: user.token}})
-				.then(res => { return res.data; })
-				.then(data=>{
-					console.log(data);
-					data.map(each=>{ 
-						const temp = {
-							timestamp: each.time,
-							txhash: each.txhash,
-							receiver: each.to,
-							value: each.value,
-							block:each.blockNumber
-						}
-						previous.push(temp);
-					})
-					const newState=Object.assign({},this.state,{transactions:previous})
-					this.setState(newState)
-				}).catch(console.log)
+			.then(res => { return res.data; })
+			.then(data => {
+				console.log(data);
+				var previous=[];
+				data.map(each => {
+					const temp = {
+						timestamp: each.time,
+						txhash: each.txhash,
+						receiver: each.to,
+						value: each.value,
+						block: each.blockNumber
+					}
+					previous.push(temp);
+				})
+				const newState = Object.assign({}, this.state, { transactions: previous })
+				this.setState(newState)
+			}).catch(err =>{console.log("[err: transactions] "+err)})
 	}
 
 	componentDidUpdate(prevProps, prevState) {
@@ -482,6 +508,29 @@ class Dash extends Component {
 					<InfoIcon />
 					<span>The blockchain itself.</span>
 				</div>
+				
+				<table className="transaction-history">
+					<thead>
+						<tr className="headers">
+							<th>Block</th>
+							<th>Time</th>
+							<th>Transaction Hash</th>
+							
+						</tr>
+					</thead>
+					<tbody>
+						{this.state.chain.map(each => {
+							return (
+								<tr>
+									<td className="block">{each.block}</td>
+									<td className="timestamp">{each.timestamp}</td>
+									<td className="sender">{each.txhash}</td>
+									
+								</tr>
+							)
+						})}
+					</tbody>
+				</table>
 			</div>
 		)
 	}

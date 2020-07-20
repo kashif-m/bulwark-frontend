@@ -325,7 +325,7 @@
 					box-sizing: border-box
 					width: max-content
 					display: block
-					max-height: 300px	
+					max-height: 250px	
 					th
 						border-radius: 3px
 						font:
@@ -502,6 +502,30 @@
 				&.disabled
 					cursor: not-allowed
 					background-color: $gray_platinum
+	.blockchain
+		.transaction-history
+					margin-top: 10
+					box-sizing: border-box
+					width: max-content
+					display: block
+					max-height: 400px	
+					th
+						border-radius: 3px
+						font:
+							size: 20
+							family: Varela
+						background-color: black
+						color: white
+						padding: 10 10 10 10
+					tr 
+						background-color: $gray_platinum
+						text-align: center
+
+					tr:nth-child(even)
+						background-color: #C8C8C8
+					td
+						font-size: 16
+						padding: 10 10 10 10
 
 @media (max-width: 640px)
 	.dash
