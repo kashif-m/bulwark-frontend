@@ -6,7 +6,6 @@ import {getFormattedDate} from '../util/helpers'
 // SVG
 import AccountIcon from '../assets/images/account.svg'
 import AddIcon from '../assets/images/add.svg'
-import BackIcon from '../assets/images/back.svg'
 import BitcoinIcon from '../assets/images/bitcoin.svg'
 import BlockchainIcon from '../assets/images/blockchain.svg'
 import BulwarkLogo from '../assets/images/bulwarklogo.svg'
