@@ -18,6 +18,7 @@ const Home = props => {
 		password: '',
 		name: ''
 	})
+	const [wait, setWait] = useState(false)
 
 	useEffect(() => {
 		setErr(false)
@@ -48,6 +49,7 @@ const Home = props => {
 				}
 				else setErr('Could not connect to bulwark-backend.')
 			})
+			.finally(() => setWait(false))
 	}
 
 	const verifyUser = () => {
@@ -69,6 +71,7 @@ const Home = props => {
 				}
 				else setErr('Could not connect to bulwark-backend.')
 			})
+			.finally(() => setWait(false))
 	}
 
 	const resetUser = () => {
@@ -83,6 +86,7 @@ const Home = props => {
 				}
 				else setErr('Could no connect to bulwark-backend')
 			})
+			.finally(() => setWait(false))
 	}
 
 	const renderForm = () => {
@@ -112,8 +116,11 @@ const Home = props => {
 				<input id='password' type="password" placeholder='Your password'
 					onChange={e => updateData('password', e.target.value)} />
 
-				<div className="submit"
-					onClick={() => verifyUser()} >LOGIN</div>
+				<div className={`submit ${wait}`} disabled={wait !== false}
+					onClick={() => {
+						setWait('loading')
+						verifyUser()
+					}} >{wait ? 'LOADING ...' : 'LOGIN'}</div>
 			</div>
 			: authScreen === 'signup' ?
 			<div className="signup-form">
@@ -140,8 +147,11 @@ const Home = props => {
 				<input type="text" id="name" placeholder='Full name as per Aadhar'
 					onChange={e => updateData('name', e.target.value)} />
 
-				<div className="submit"
-					onClick={() => createUser()} >REGISTER</div>
+				<div className={`submit ${wait}`} disabled={wait !== false}
+					onClick={() => {
+						setWait('loading')
+						createUser()
+					}} >{wait ? 'LOADING ...' : 'REGISTER'}</div>
 			</div>
 			: authScreen === 'reset' ?
 			<div className="reset-form">
@@ -168,8 +178,11 @@ const Home = props => {
 				<input type="text" id='email' placeholder='Your registered e-mail'
 					onChange={e => updateData('email', e.target.value)} />
 
-				<div className="submit"
-					onClick={() => resetUser()} >SUBMIT</div>
+				<div className={`submit ${wait}`} disabled={wait !== false}
+					onClick={() => {
+						setWait('loading')
+						resetUser()
+					}} >SUBMIT</div>
 			</div>
 			: null
 		)

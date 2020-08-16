@@ -138,5 +138,6 @@
                 transition: .15s all
         .submit
             border: 0
-            &.disabled
-                background-color: $gray_platinum
+            &.loading, &.disabled
+                cursor: not-allowed
+                background-color: #81A7EE

@@ -428,11 +428,11 @@
 				padding: 10 40
 				color: white
 				border-radius: 2px
-				width: min-content
-				transition: .3s all
-				&:hover
-					transition: .15s all
-		            background-color: black
+				width: max-content
+				&.loading
+					cursor: not-allowed
+				&.loading
+                	background-color: #81A7EE
 
 		.payment-details
 			display: flex
@@ -517,9 +517,9 @@
 				font:
 					family: ProductSansBold
 					size: 18
-				&.disabled
+				&.disabled, &.loading
 					cursor: not-allowed
-					background-color: $gray_platinum
+					background-color: #81A7EE
 	.blockchain
 		overflow: hidden
 		max-height: 92vh

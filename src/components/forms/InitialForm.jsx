@@ -11,6 +11,7 @@ const InitialForm = props => {
     const [user, updateUser] = props.user
     const [form, setForm] = useState('user')
     const [err, setErr]   = useState(false)
+    const [wait, setWait] = useState(false)
     const [readable, setReadable] = useState({interval: '2 years', coverage: 'INR'})
     const [data, setData] = useState({
         user: {
@@ -35,13 +36,13 @@ const InitialForm = props => {
         if (key === 'aadhar') {
             const _value = value.replace(/ /g, '')
             if(isNaN(_value)) return
-            if(_value.length > 16) return
+            if(_value.length > 12) return
             if (_value.length > 0
                 && _value.length % 4 === 0
-                && _value.length !== 16
+                && _value.length !== 12
                 && value.length > temp[form][key].length )
                 temp[form][key] = value + ' '
-            else if(_value.length % 4 === 0 && _value.length < 16)
+            else if(_value.length % 4 === 0 && _value.length < 12)
                 temp[form][key] = value.slice(0, value.length - 1)
             else temp[form][key] = value
         } else if(form === 'location') {
@@ -124,6 +125,7 @@ const InitialForm = props => {
                     setForm(_form)
                 }
             })
+            .finally(() => setWait(false))
 	}
 
 	const personalDetails = () => {
@@ -203,9 +205,12 @@ const InitialForm = props => {
         )
     }
 
-    const renderSubmitButton = () => <div className={`submit${data.insurance.interval === 0 || data.insurance.interval >= 1212 ? ' disabled' : ''}`}
-                                            disabled={data.insurance.interval === 0 || data.insurance.interval >= 1212}
-                                            onClick={() => updateUserDetails()} >Submit</div>
+    const renderSubmitButton = () => <div className={`submit${data.insurance.interval === 0 || data.insurance.interval >= 1212 ? ' disabled' : ''} ${wait}`}
+                                            disabled={data.insurance.interval === 0 || data.insurance.interval >= 1212 || wait !== false}
+                                            onClick={() => {
+                                                setWait('loading')
+                                                updateUserDetails()
+                                            }} >{wait ? 'Loading ...' : 'Submit'}</div>
     const renderPrevButton = () => <div className="prev"
                                             onClick={() => setForm(form === 'location' ? 'user'
                                                                     : form === 'insurance' ? 'location'

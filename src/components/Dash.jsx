@@ -40,12 +40,14 @@ class Dash extends Component {
 			},
 			claims: 'loading',
 			receipt: false,
-			transactions:[],
-			chain:[]
+			transactions: [],
+			chain: [],
+			wait: false
 		}
 	}
 
 	updateClaimFormView = viewClaimForm => this.setState({viewClaimForm})
+	updateWait = wait => this.setState({wait})
 
 	componentDidMount() {
 		const [user] = this.props.user
@@ -144,6 +146,7 @@ class Dash extends Component {
 				else res.data.user ? updateUser(res.data.user) : null
 			})
 			.catch(err => console.log(err.response.data))
+			.finally(() => this.updateWait(false))
 	}
 
 	payPremium = () => {
@@ -156,6 +159,7 @@ class Dash extends Component {
 				if(res.data.receipt) this.setState({receipt: res.data.receipt})
 			})
 			.catch(err => console.log(err.response.data))
+			.finally(() => this.updateWait(false))
 	}
 
 	submitWallet = (dev = false) => {
@@ -164,11 +168,12 @@ class Dash extends Component {
 			axios.get('http://localhost:5000/user/dev:keys', {headers: {Authorization: user.token}})
 				.then(res => updateUser(res.data.user))
 				.catch(err => console.log(err))
+				.finally(() => this.updateWait(false))
 		}
 	}
 
 	renderAddWallet = () => {
-		const wallet = this.state.wallet
+		const {wallet, wait} = this.state
 		const isSubmitDisabled = wallet.length !== 42
 		return (
 			<div className="add-wallet">
@@ -191,7 +196,12 @@ class Dash extends Component {
 						value={wallet} />
 					<button className={`submit${isSubmitDisabled ? ' disabled': ''}`} onClick={() => this.submitWallet()}
 						disabled={isSubmitDisabled} >SUBMIT</button>
-					<span className="dev-keys" onClick={() => this.submitWallet(true)} >Use Dev Wallet</span>
+					<span className={`dev-keys ${wait}`} onClick={() => {
+						this.updateWait('loading')
+						this.submitWallet(true)
+					}} >
+						{wait ? 'Using Dev Wallet ...' : 'Use Dev Wallet'}
+					</span>
 				</div>
 			</div>
 		)
@@ -206,7 +216,7 @@ class Dash extends Component {
 		}
 
 		const [user, updateUser]		= this.props.user
-		const {selectedOption, receipt} = this.state
+		const {selectedOption, receipt, wait} = this.state
 
 		const insurance  = user.insurance
 		user._payPremium = ((insurance.coverage / 100) * 3).toFixed(2)
@@ -292,7 +302,13 @@ class Dash extends Component {
 									{interval.from} - {interval.to}
 								</div>
 							</div>
-							<div className="submit" onClick={() => initial ? this.signUp() : this.payPremium() }> PROCEED</div>
+							<div className={`submit ${wait}`} onClick={() => {
+								this.updateWait('loading')
+								if(initial) this.signUp()
+								else this.payPremium()
+							}}>
+								{wait ? 'Loading ...' : 'Proceed'}
+							</div>
 						</div>
 					</React.Fragment>
 					: <React.Fragment>
